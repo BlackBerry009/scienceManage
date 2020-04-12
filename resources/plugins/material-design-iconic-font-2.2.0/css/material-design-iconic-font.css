@@ -632,12 +632,13 @@
   content: '\f199';
 }
 .zmdi-money:before {
-  content: '\f19a';
+  content: '\f198';
 }
 .zmdi-more-vert:before {
   content: '\f19b';
 }
 .zmdi-more:before {
+
   content: '\f19c';
 }
 .zmdi-movie-alt:before {
