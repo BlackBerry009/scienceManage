@@ -1,18 +1,17 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html lang="zh-cn">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>通用增删改查</title>
-	<link href="resources/plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
-	<link href="resources/plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
-	<link href="resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.css" rel="stylesheet"/>
-	<link href="resources/plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
-	<link href="resources/plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
-	<link href="resources/plugins/select2/css/select2.min.css" rel="stylesheet"/>
-
-	<link href="resources/css/common.css" rel="stylesheet"/>
+	<link href="../resources/plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="../resources/plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
+	<link href="../resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.css" rel="stylesheet"/>
+	<link href="../resources/plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
+	<link href="../resources/plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
+	<link href="../resources/plugins/select2/css/select2.min.css" rel="stylesheet"/>
+	<link href="../resources/css/common.css" rel="stylesheet"/>
 </head>
 <body>
 <div id="main">
@@ -44,15 +43,14 @@
 		</div>
 	</form>
 </div>
-<script src="resources/plugins/jquery.1.12.4.min.js"></script>
-<script src="resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
-<script src="resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.js"></script>
-<script src="resources/plugins/bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
-<script src="resources/plugins/waves-0.7.5/waves.min.js"></script>
-<script src="resources/plugins/jquery-confirm/jquery-confirm.min.js"></script>
-<script src="resources/plugins/select2/js/select2.min.js"></script>
-
-<script src="resources/js/common.js"></script>
+<script src="../resources/plugins/jquery.1.12.4.min.js"></script>
+<script src="../resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+<script src="../resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.js"></script>
+<script src="../resources/plugins/bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="../resources/plugins/waves-0.7.5/waves.min.js"></script>
+<script src="../resources/plugins/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="../resources/plugins/select2/js/select2.min.js"></script>
+<script src="../resources/js/common.js"></script>
 <script>
 var $table = $('#table');
 $(function() {
@@ -66,7 +64,7 @@ $(function() {
 	// bootstrap table初始化
 	// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
 	$table.bootstrapTable({
-		url: 'resources/data/data1.json',
+		url: '../resources/data/manage.json',
 		height: getHeight(),
 		striped: true,
 		search: true,
@@ -78,7 +76,7 @@ $(function() {
 		showPaginationSwitch: true,
 		clickToSelect: true,
 		detailView: true,
-		detailFormatter: 'detailFormatter',
+        detailFormatter: 'detailFormatter',
 		pagination: true,
 		paginationLoop: false,
 		classes: 'table table-hover table-no-bordered',
@@ -95,16 +93,18 @@ $(function() {
 		toolbar: '#toolbar',
 		columns: [
 			{field: 'state', checkbox: true},
-			{field: 'id', title: '编号', sortable: true, halign: 'center'},
-			{field: 'username', title: '账号', sortable: true, halign: 'center'},
-			{field: 'password', title: '密码', sortable: true, halign: 'center'},
-			{field: 'name', title: '姓名', sortable: true, halign: 'center'},
-			{field: 'sex', title: '性别', sortable: true, halign: 'center'},
-			{field: 'age', title: '年龄', sortable: true, halign: 'center'},
-			{field: 'phone', title: '手机', sortable: true, halign: 'center'},
-			{field: 'email', title: '邮箱', sortable: true, halign: 'center'},
-			{field: 'address', title: '地址', sortable: true, halign: 'center'},
-			{field: 'remark', title: '备注', sortable: true, halign: 'center'},
+			{field: 'id', title: '序号', sortable: true, halign: 'center'},
+			{field: 'pid', title: '项目编号', halign: 'center'},
+			{field: 'pname', title: '项目名称', sortable: true, halign: 'center'},
+			{field: 'type', title: '类别', sortable: true, halign: 'center'},
+			{field: 'subject', title: '学科', sortable: true, halign: 'center'},
+			{field: 'money', title: '预算', sortable: true, halign: 'center'},
+			{field: 'start', title: '开始时间', sortable: true, halign: 'center'},
+			{field: 'end', title: '结束时间', sortable: true, halign: 'center'},
+			{field: '下载', title: '下载', sortable: true, halign: 'center',formatter: 'download'},
+			{field: 'check', title: '审核', sortable: true, halign: 'center'},
+			{field: 'suggest', title: '意见', sortable: true, halign: 'center'},
+			{field: 'rate', title: '评分', sortable: true, halign: 'center'},
 			{field: 'action', title: '操作', halign: 'center', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
 		]
 	}).on('all.bs.table', function (e, name, args) {
@@ -112,6 +112,11 @@ $(function() {
 		$('[data-toggle="popover"]').popover();  
 	});
 });
+
+function download(value,row,index){
+	return `<a href="#" style="color:blue" download>下载</a>`
+}
+
 function actionFormatter(value, row, index) {
     return [
         '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',

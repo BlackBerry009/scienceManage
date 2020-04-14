@@ -1,17 +1,17 @@
 var click = device.mobile() ? 'touchstart' : 'click';
-$(function() {
+$(function () {
 	// 侧边栏操作按钮
-	$(document).on(click, '#guide', function() {
+	$(document).on(click, '#guide', function () {
 		$(this).toggleClass('toggled');
 		$('#sidebar').toggleClass('toggled');
 	});
 	// 侧边栏二级菜单
-	$(document).on('click', '.sub-menu a', function() {
+	$(document).on('click', '.sub-menu a', function () {
 		$(this).next().slideToggle(200);
 		$(this).parent().toggleClass('toggled');
 	});
 	// 个人资料
-	$(document).on('click', '.s-profile a', function() {
+	$(document).on('click', '.s-profile a', function () {
 		$(this).next().slideToggle(200);
 		$(this).parent().toggleClass('toggled');
 	});
@@ -48,16 +48,16 @@ function resizeFrameHeight() {
 	$('.tab_iframe').css('height', document.documentElement.clientHeight - 118);
 	$('md-tab-content').css('left', '0');
 }
-window.onresize = function() {
+window.onresize = function () {
 	resizeFrameHeight();
 	initScrollShow();
 	initScrollState();
 }
 
 // ========== 选项卡操作 ==========
-$(function() {
+$(function () {
 	// 选项卡点击
-	$(document).on('click', '.content_tab li', function() {
+	$(document).on('click', '.content_tab li', function () {
 		// 切换选项卡
 		$('.content_tab li').removeClass('cur');
 		$(this).addClass('cur');
@@ -68,32 +68,32 @@ $(function() {
 		// 滚动到可视区域:在左侧
 		if ($(this).position().left < marginLeft) {
 			var left = $('.content_tab>ul').scrollLeft() + $(this).position().left - marginLeft;
-			$('.content_tab>ul').animate({scrollLeft: left}, 200, function() {
+			$('.content_tab>ul').animate({ scrollLeft: left }, 200, function () {
 				initScrollState();
 			});
 		}
 		// 滚动到可视区域:在右侧
-		if(($(this).position().left + $(this).width() - marginLeft) > document.getElementById('tabs').clientWidth) {
+		if (($(this).position().left + $(this).width() - marginLeft) > document.getElementById('tabs').clientWidth) {
 			var left = $('.content_tab>ul').scrollLeft() + (($(this).position().left + $(this).width() - marginLeft) - document.getElementById('tabs').clientWidth);
-			$('.content_tab>ul').animate({scrollLeft: left}, 200, function() {
+			$('.content_tab>ul').animate({ scrollLeft: left }, 200, function () {
 				initScrollState();
 			});
 		}
 	});
 	// 控制选项卡滚动位置 
-	$(document).on('click', '.tab_left>a', function() {
-		$('.content_tab>ul').animate({scrollLeft: $('.content_tab>ul').scrollLeft() - 300}, 200, function() {
+	$(document).on('click', '.tab_left>a', function () {
+		$('.content_tab>ul').animate({ scrollLeft: $('.content_tab>ul').scrollLeft() - 300 }, 200, function () {
 			initScrollState();
 		});
 	});
 	// 向右箭头
-	$(document).on('click', '.tab_right>a', function() {
-		$('.content_tab>ul').animate({scrollLeft: $('.content_tab>ul').scrollLeft() + 300}, 200, function() {
+	$(document).on('click', '.tab_right>a', function () {
+		$('.content_tab>ul').animate({ scrollLeft: $('.content_tab>ul').scrollLeft() + 300 }, 200, function () {
 			initScrollState();
 		});
 	});
 	// 初始化箭头状态
-	
+
 	// 选项卡右键菜单
 	// var menu = new BootstrapMenu('.tabs li', {
 	// 	fetchElementData: function(item) {
@@ -175,20 +175,20 @@ $(function() {
 });
 // 选项卡对象
 var Tab = {
-	addTab: function(title, url) {
+	addTab: function (title, url) {
 		var index = url.replace(/\./g, '_').replace(/\//g, '_').replace(/:/g, '_').replace(/\?/g, '_').replace(/,/g, '_').replace(/=/g, '_').replace(/&/g, '_');
 		// 如果存在选项卡，则激活，否则创建新选项卡
 		if ($('#tab_' + index).length == 0) {
 			// 添加选项卡
 			$('.content_tab li').removeClass('cur');
-            var tab = '<li id="tab_' + index +'" data-index="' + index + '" class="cur"><span class="waves-effect waves-light">' + title + '</span><i class="waves-effect waves-light zmdi zmdi-close" onclick="Tab.closeTab($(\'#tab_' + index +'\'));"></i></li>';
+			var tab = '<li id="tab_' + index + '" data-index="' + index + '" class="cur"><span class="waves-effect waves-light">' + title + '</span><i class="waves-effect waves-light zmdi zmdi-close" onclick="Tab.closeTab($(\'#tab_' + index + '\'));"></i></li>';
 			$('.content_tab>ul').append(tab);
 			// 添加iframe
 			$('.iframe').removeClass('cur');
 			var iframe = '<div id="iframe_' + index + '" class="iframe cur"><iframe class="tab_iframe" src="' + url + '" width="100%" frameborder="0" scrolling="auto" onload="changeFrameHeight(this)"></iframe></div>';
 			$('.content_main').append(iframe);
 			initScrollShow();
-			$('.content_tab>ul').animate({scrollLeft: document.getElementById('tabs').scrollWidth - document.getElementById('tabs').clientWidth}, 200, function() {
+			$('.content_tab>ul').animate({ scrollLeft: document.getElementById('tabs').scrollWidth - document.getElementById('tabs').clientWidth }, 200, function () {
 				initScrollState();
 			});
 		} else {
@@ -197,11 +197,11 @@ var Tab = {
 		// 关闭侧边栏
 		$('#guide').trigger(click);
 	},
-	closeTab: function($item) {
+	closeTab: function ($item) {
 		var closeable = $item.data('closeable');
 		if (closeable != false) {
 			// 如果当前时激活状态则关闭后激活左边选项卡
-			if($item.hasClass('cur')) {
+			if ($item.hasClass('cur')) {
 				$item.prev().trigger('click');
 			}
 			// 关闭当前选项卡
@@ -244,3 +244,5 @@ function fullPage() {
 		alert("当前浏览器不支持全屏 API，请更换至最新的 Chrome/Firefox/Safari 浏览器或通过 F11 快捷键进行操作。");
 	}
 }
+
+

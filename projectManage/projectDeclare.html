@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../resources/plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <!-- 
+    项目编号
+    项目名称
+    项目负责人
+    申请类别
+    学科分类
+    预算经费
+    开始 结束时间
+    上传申请书 
+    -->
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="pId" class="col-sm-2 control-label">项目编号</label>
+            <div class="col-sm-10 col-md-6">
+                <input type="number" class="form-control" id="pId">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="pName" class="col-sm-2 control-label">项目名称</label>
+            <div class="col-sm-10 col-md-6">
+                <input type="text" class="form-control" id="pName" placeholder="项目名称" name="pName">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="pManager" class="col-sm-2 control-label">项目负责人</label>
+            <div class="col-sm-10 col-md-6">
+                <input type="text" class="form-control" id="pManager" placeholder="项目负责人" name="pManager">
+            </div>
+        </div>
+
+        <!-- 申请类别 -->
+        <div class="form-group">
+            <label for="typeApply" class="col-sm-2 control-label">申请类别</label>
+            <div class="col-sm-10 col-md-4">
+                <select name="" id="typeApply">
+                    <option value="">国家级</option>
+                    <option value="">xxx</option>
+                </select>
+            </div>
+        </div>
+        <!-- 学科分类 -->
+
+        <div class="form-group">
+            <label for="typeSubject" class="col-sm-2 control-label">学科分类</label>
+            <div class="col-sm-10 col-md-4">
+                <select name="" id="typeSubject">
+                    <option value="">社科</option>
+                    <option value="">理科</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="pMoney" class="col-sm-2 control-label">预算经费</label>
+            <div class="col-sm-10 col-md-6">
+                <input type="number" class="form-control" id="pMoney" placeholder="预算经费">
+            </div>
+        </div>
+
+
+
+        
+        <div class="form-group">
+            <label for="applyForm" class="col-sm-2 control-label">上传申请书</label>
+            <div class="col-sm-10 col-md-6">
+                <input type="file" id="applyForm">
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary">Submit</button>
+    </form>
+    <script src="../resources/plugins/jquery.1.12.4.min.js"></script>
+    <script src="../resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+
+    <script>
+
+        $('.btn').click( function (){
+            var a = $('form').serializeArray();
+            console.log(a)
+        })
+    </script>
+</body>
+
+</html>
