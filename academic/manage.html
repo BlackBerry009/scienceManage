@@ -89,7 +89,7 @@
 			// bootstrap table初始化
 			// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
 			$table.bootstrapTable({
-				url: '../resources/data/manage.json',
+				url: '../resources/data/academic.json',
 				height: getHeight(),
 				striped: true,
 				search: true,
@@ -127,75 +127,41 @@
 						align: 'center'
 					},
 					{
-						field: 'pid',
-						title: '项目编号',
+						field: 'title',
+						title: '活动标题',
 						align: 'center'
 					},
 					{
-						field: 'pname',
-						title: '项目名称',
+						field: 'time',
+						title: '时间',
 						sortable: true,
 						align: 'center'
 					},
 					{
-						field: 'type',
-						title: '类别',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'subject',
-						title: '学科',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'money',
-						title: '预算',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'start',
-						title: '开始时间',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'end',
-						title: '结束时间',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: '',
-						title: '下载',
+						field: 'user',
+						title: '用户',
 						sortable: true,
 						align: 'center',
-						formatter: 'download'
+					},
+                    {
+						field: 'unit',
+						title: '单位',
+						align: 'center'
 					},
 					{
 						field: 'check',
 						title: '审核',
-						sortable: true,
 						align: 'center'
 					},
 					{
 						field: 'suggest',
 						title: '意见',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'rate',
-						title: '评分',
-						sortable: true,
 						align: 'center'
 					},
 					{
 						field: 'action',
 						title: '操作',
-						align: 'center',
+						halign: 'center',
 						align: 'center',
 						formatter: 'actionFormatter',
 						events: 'actionEvents',
@@ -208,9 +174,6 @@
 			});
 		});
 
-		function download(value, row, index) {
-			return `<a href="#" style="color:blue" download>下载</a>`
-		}
 
 		function actionFormatter(value, row, index) {
 			return [

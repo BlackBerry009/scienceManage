@@ -18,6 +18,23 @@ var mockData = Mock.mock({
     }]
 })
 
+var academic = Mock.mock({
+    "data|30": [{
+        "id|+1": 1,
+        "title": "@cword(4)",
+        "time": "@date",
+        "user": "@cname",
+        "unit": "@csentence(4)",
+        "check": "@string(同意不同意,2)",
+        "suggest": "@string(同意不同意,2)",
+    }]
+})
+
+
 fs.writeFile("./resources/data/manage.json",JSON.stringify(mockData.data),(err)=>{
+    if(!err) console.log('success')
+})
+
+fs.writeFile("./resources/data/academic.json",JSON.stringify(academic.data),(err)=>{
     if(!err) console.log('success')
 })
