@@ -99,7 +99,7 @@
 				showColumns: true,
 				minimumCountColumns: 2,
 				showPaginationSwitch: true,
-				// clickToSelect: true,
+				clickToSelect: true,
 				detailView: true,
 				detailFormatter: 'detailFormatter',
 				pagination: true,
@@ -124,37 +124,26 @@
 						align: 'center'
 					},
 					{
-						field: 'pid',
-						title: '项目编号',
-						align: 'center'
-					},
-					{
 						field: 'pname',
-						title: '项目名称',
+						title: '成果名称',
+						sortable: true,
+						align: 'center'
+                    },
+                    {
+						field: 'pname',
+						title: '负责人',
+						sortable: true,
+						align: 'center'
+                    },
+                    {
+						field: 'pname',
+						title: '成员',
 						sortable: true,
 						align: 'center'
 					},
 					{
-						field: 'subject',
-						title: '性质',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'money',
-						title: '预算',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'start',
-						title: '开始时间',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'end',
-						title: '结束时间',
+						field: 'type',
+						title: '类别',
 						sortable: true,
 						align: 'center'
 					},
@@ -164,19 +153,19 @@
 						sortable: true,
 						align: 'center',
 						formatter: 'download'
-					},
-					{
-						field: 'check',
-						title: '审核',
+                    },
+                    {
+						field: 'pname',
+						title: '申请用户',
 						sortable: true,
 						align: 'center'
-					},
-					{
-						field: 'check',
-						title: '状态',
+                    },
+                    {
+						field: 'pname',
+						title: '单位',
 						sortable: true,
 						align: 'center'
-					}
+                    },
 				]
 			}).on('all.bs.table', function (e, name, args) {
 				$('[data-toggle="tooltip"]').tooltip();
@@ -188,6 +177,7 @@
 			return `<a href="#" style="color:blue" download>下载</a>`
 		}
 
+	
 
 		function detailFormatter(index, row) {
 			var html = [];

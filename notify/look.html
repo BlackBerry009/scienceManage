@@ -116,10 +116,7 @@
 				idField: 'systemId',
 				maintainSelected: true,
 				toolbar: '#toolbar',
-				columns: [{
-						field: 'state',
-						checkbox: true
-					},
+				columns: [
 					{
 						field: 'id',
 						title: '序号',
@@ -149,22 +146,7 @@
 						title: '发布用户',
 						sortable: true,
 						align: 'center'
-                    },
-                    {
-						field: 'pname',
-						title: '单位',
-						sortable: true,
-						align: 'center'
-                    },
-					{
-						field: 'action',
-						title: '操作',
-						align: 'center',
-						align: 'center',
-						formatter: 'actionFormatter',
-						events: 'actionEvents',
-						clickToSelect: false
-					}
+                    }
 				]
 			}).on('all.bs.table', function (e, name, args) {
 				$('[data-toggle="tooltip"]').tooltip();
@@ -175,30 +157,6 @@
 		function download(value, row, index) {
 			return `<a href="#" style="color:blue" download>下载</a>`
 		}
-
-		function actionFormatter(value, row, index) {
-			return [
-				'<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
-				'<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
-			].join('');
-		}
-
-		window.actionEvents = {
-			'click .edit': function (e, value, row, index) {
-				$('#myModal').modal();
-				$('#pname').val(row.pname);
-				$('#type').val(row.type);
-				$('#subject').val(row.subject);
-				$('#money').val(row.money);
-				$('#check').val(row.check);
-				$('#suggest').val(row.suggest);
-
-			},
-			'click .remove': function (e, value, row, index) {
-				alert('You click remove icon, row: ' + JSON.stringify(row));
-				console.log(value, row, index);
-			}
-		};
 
 		function detailFormatter(index, row) {
 			var html = [];
