@@ -125,66 +125,28 @@
 					{
 						field: 'pid',
 						title: '项目编号',
+						sortable: true,
 						align: 'center'
-					},
-					{
+                    },
+                    {
 						field: 'pname',
 						title: '项目名称',
 						sortable: true,
 						align: 'center'
 					},
-					{
-						field: 'subject',
-						title: '性质',
+                    {
+						field: 'pname',
+						title: '负责人',
 						sortable: true,
 						align: 'center'
-					},
-					{
-						field: 'money',
-						title: '预算',
+                    },
+                    {
+						field: 'pname',
+						title: '变更内容',
 						sortable: true,
 						align: 'center'
-					},
-					{
-						field: 'start',
-						title: '开始时间',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'end',
-						title: '结束时间',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: '',
-						title: '下载',
-						sortable: true,
-						align: 'center',
-						formatter: 'download'
-					},
-					{
-						field: 'check',
-						title: '审核',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'check',
-						title: '状态',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'action',
-						title: '操作',
-						halign: 'center',
-						align: 'center',
-						formatter: 'actionFormatter',
-						events: 'actionEvents',
-						clickToSelect: false
 					}
+					
 				]
 			}).on('all.bs.table', function (e, name, args) {
 				$('[data-toggle="tooltip"]').tooltip();
@@ -192,27 +154,8 @@
 			});
 		});
 
-		function actionFormatter(value, row, index) {
-			return [
-				'<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
-				'<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
-			].join('');
-		}
 
-		window.actionEvents = {
-			'click .edit': function (e, value, row, index) {
-				alert('You click edit icon, row: ' + JSON.stringify(row));
-				console.log(value, row, index);
-			},
-			'click .remove': function (e, value, row, index) {
-				alert('You click remove icon, row: ' + JSON.stringify(row));
-				console.log(value, row, index);
-			}
-		};
-
-		function download(value, row, index) {
-			return `<a href="#" style="color:blue" download>下载</a>`
-		}
+	
 
 
 		function detailFormatter(index, row) {

@@ -89,7 +89,7 @@
 			// bootstrap table初始化
 			// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
 			$table.bootstrapTable({
-				url: '../resources/data/academic.json',
+				url: '../resources/data/manage.json',
 				height: getHeight(),
 				striped: true,
 				search: true,
@@ -99,7 +99,7 @@
 				showColumns: true,
 				minimumCountColumns: 2,
 				showPaginationSwitch: true,
-				clickToSelect: true,
+				// clickToSelect: true,
 				detailView: true,
 				detailFormatter: 'detailFormatter',
 				pagination: true,
@@ -117,50 +117,75 @@
 				maintainSelected: true,
 				toolbar: '#toolbar',
 				columns: [{
-						field: 'state',
-						checkbox: true
-					},
-					{
 						field: 'id',
 						title: '序号',
 						sortable: true,
 						align: 'center'
 					},
 					{
-						field: 'title',
-						title: '活动标题',
+						field: 'pname',
+						title: '项目名称',
+						sortable: true,
 						align: 'center'
-					},
-					{
-						field: 'time',
-						title: '时间',
+                    },
+                    {
+						field: 'pname',
+						title: '项目概述',
 						sortable: true,
 						align: 'center'
 					},
 					{
-						field: 'user',
-						title: '用户',
+						field: 'subject',
+						title: '性质',
+						sortable: true,
+						align: 'center'
+                    },
+                    {
+						field: 'pname',
+						title: '负责人',
+						sortable: true,
+						align: 'center'
+                    },
+                    {
+						field: 'pname',
+						title: '成员',
+						sortable: true,
+						align: 'center'
+					},
+					{
+						field: 'pname',
+						title: '单位',
+						sortable: true,
+						align: 'center'
+					},
+					{
+						field: 'money',
+						title: '预算',
+						sortable: true,
+						align: 'center'
+					},
+					{
+						field: 'start',
+						title: '开始时间',
+						sortable: true,
+						align: 'center'
+					},
+					{
+						field: 'end',
+						title: '结束时间',
+						sortable: true,
+						align: 'center'
+					},
+					{
+						field: '',
+						title: '下载',
 						sortable: true,
 						align: 'center',
-					},
-                    {
-						field: 'unit',
-						title: '单位',
-						align: 'center'
-					},
-					{
-						field: 'check',
-						title: '审核',
-						align: 'center'
-					},
-					{
-						field: 'suggest',
-						title: '意见',
-						align: 'center'
+						formatter: 'download'
 					},
 					{
 						field: 'action',
-						title: '操作',
+						title: '审核',
 						halign: 'center',
 						align: 'center',
 						formatter: 'actionFormatter',
@@ -174,30 +199,28 @@
 			});
 		});
 
-
 		function actionFormatter(value, row, index) {
 			return [
-				'<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
-				'<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
+				'<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" style="color:#32CD32">通过</a>　',
+				'<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" style="color:red">拒绝</a>'
 			].join('');
 		}
 
 		window.actionEvents = {
 			'click .edit': function (e, value, row, index) {
-				$('#myModal').modal();
-				$('#pname').val(row.pname);
-				$('#type').val(row.type);
-				$('#subject').val(row.subject);
-				$('#money').val(row.money);
-				$('#check').val(row.check);
-				$('#suggest').val(row.suggest);
-
+				alert('You click edit icon, row: ' + JSON.stringify(row));
+				console.log(value, row, index);
 			},
 			'click .remove': function (e, value, row, index) {
 				alert('You click remove icon, row: ' + JSON.stringify(row));
 				console.log(value, row, index);
 			}
 		};
+
+		function download(value, row, index) {
+			return `<a href="#" style="color:blue" download>下载</a>`
+		}
+
 
 		function detailFormatter(index, row) {
 			var html = [];

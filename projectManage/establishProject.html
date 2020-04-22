@@ -123,19 +123,38 @@
 						align: 'center'
 					},
 					{
-						field: 'pid',
-						title: '项目编号',
-						align: 'center'
-					},
-					{
 						field: 'pname',
 						title: '项目名称',
+						sortable: true,
+						align: 'center'
+                    },
+                    {
+						field: 'pname',
+						title: '项目概述',
 						sortable: true,
 						align: 'center'
 					},
 					{
 						field: 'subject',
 						title: '性质',
+						sortable: true,
+						align: 'center'
+                    },
+                    {
+						field: 'pname',
+						title: '负责人',
+						sortable: true,
+						align: 'center'
+                    },
+                    {
+						field: 'pname',
+						title: '成员',
+						sortable: true,
+						align: 'center'
+					},
+					{
+						field: 'pname',
+						title: '单位',
 						sortable: true,
 						align: 'center'
 					},
@@ -163,28 +182,15 @@
 						sortable: true,
 						align: 'center',
 						formatter: 'download'
-					},
-					{
-						field: 'check',
-						title: '审核',
+                    },
+                    {
+						field: '',
+						title: '立项',
 						sortable: true,
-						align: 'center'
+                        align: 'center',
+                        formatter: 'establish'
 					},
-					{
-						field: 'check',
-						title: '状态',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'action',
-						title: '操作',
-						halign: 'center',
-						align: 'center',
-						formatter: 'actionFormatter',
-						events: 'actionEvents',
-						clickToSelect: false
-					}
+					
 				]
 			}).on('all.bs.table', function (e, name, args) {
 				$('[data-toggle="tooltip"]').tooltip();
@@ -192,27 +198,15 @@
 			});
 		});
 
-		function actionFormatter(value, row, index) {
-			return [
-				'<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
-				'<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
-			].join('');
-		}
-
-		window.actionEvents = {
-			'click .edit': function (e, value, row, index) {
-				alert('You click edit icon, row: ' + JSON.stringify(row));
-				console.log(value, row, index);
-			},
-			'click .remove': function (e, value, row, index) {
-				alert('You click remove icon, row: ' + JSON.stringify(row));
-				console.log(value, row, index);
-			}
-		};
 
 		function download(value, row, index) {
 			return `<a href="#" style="color:blue" download>下载</a>`
-		}
+        }
+        
+        function establish(value, row, index){
+            // alert('a')
+            return `<span style="color:blue;cursor:pointer">立项</span>`
+        }
 
 
 		function detailFormatter(index, row) {
