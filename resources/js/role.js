@@ -3,13 +3,13 @@
  * 0 科研人员
  * 1 科研管理
  */
-var role = 1;
+var role = 0;
 
 window.onload = () => {
     //科研人员
     if(role == 0){
         //隐藏科研管理部分功能
-        $('.system_1.0 ul .one').hide();
+        $('.system_1.0 ul .check').hide();
         $('.system_1.0 ul .three').hide();
         $('.system_1.0 ul .four').hide();
         $('.system_1.0 ul .five').hide();
@@ -20,6 +20,8 @@ window.onload = () => {
         $('.system_1.2 ul .one').hide();
         //隐藏通知部分功能
         $('.system_1.3 ul .two').hide();
+        //隐藏查看申请功能
+        $('.system_1.4').hide();
         //隐藏权限管理
         $('.system_1.6').hide(); 
     }
