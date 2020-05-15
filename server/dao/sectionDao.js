@@ -2,15 +2,14 @@ var createConnection = require('./dbUtil');
 
 
 /**
- * 根据工号查找信息
+ * 查找所有院名
  */
-exports.lookPassword = function (teacherID) {
+exports.allSection = function () {
     return new Promise((res, rej) => {
         var conn = createConnection();
         conn.connect();
-        var sql = 'select * from Teacher where teacherID = ?';
-        var params = [teacherID];
-        conn.query(sql, params,(err,result) => {
+        var sql = 'select sectionName from Section ';
+        conn.query(sql, (err,result) => {
             if (err) {
                 rej(err)
             }
@@ -21,4 +20,3 @@ exports.lookPassword = function (teacherID) {
         conn.end(); 
     })
 }
-

@@ -1,0 +1,56 @@
+-1 >> 32
+
+
+vue
+
+$set添加对象属性
+$nextTick dom渲染完 
+
+
+JSON.stringify({a:null})
+JSON.stringify({a:undefined})
+
+
+
+算法：
+1.最长不重复子串  
+2.给定arr= [6,8,2,7]  sum=10    =>   10 = 8 + 2      其他思路  
+3.二叉树还原
+	
+requestAnimationFrame 为什么是16ms
+bind源码
+闭包
+promise封装ajax
+手写Event bus
+Event Loop
+三次握手四次挥手
+304的流程怎么样的，如何判断未修改
+DNS解析     DNS顶级服务器是否保存了所有ip地址
+DOMContentLoad   Load
+503
+观察者模式和发布订阅模式的区别
+进程和线程  为什么要多线程
+
+问自己项目… 详细过程
+设计一个搜索框，可复用性，考虑解耦（返回的数据格式不一样）
+
+
+同花顺：
+页面所有可点击的都需要发送请求，怎么设计
+https和http区别
+3次握手为什么是3次
+挥手为什么是4次
+挥手为什么要有两个报文时间
+双向绑定原理
+diff算法
+虚拟dom如何转化为dom
+事件轮询
+proxy的缺点
+
+途虎：
+wepack和gulp的区别
+express和koa区别
+还原二叉树
+promise.all源码
+
+

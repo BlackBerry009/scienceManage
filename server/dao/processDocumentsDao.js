@@ -2,19 +2,18 @@ var createConnection = require('./dbUtil');
 
 
 /** 
- * 申请变更项目内容
+ * 提交报告
  * 编号
- * 名称
- * 负责人
- * 内容
+ * 分类
+ * 文件
  */
-exports.changeProject = function (obj) {
+exports.submitReport = function (obj) {
     return new Promise((res, rej) => {
         var conn = createConnection();
         conn.connect();
 
-        var sql = 'insert into ChangeRequest(projectID,projectName,teacherID,teacherName,changeContent,state,issue) values (?,?,?,?,?,?,?)';
-        var params = [obj.projectID,obj.projectName,obj.teacherID, obj.teacherName, obj.changeContent, 0, ''];
+        var sql = 'insert into ProcessDocuments(teacherID,teacherName,projectID,type,state,fileName,filePath) values (?,?,?,?,?)';
+        var params = [obj.teacherID,obj.teacherName,obj.projectID, obj.type, 0,obj.fileName,obj.filePath];
         conn.query(sql, params)
 
         conn.end(err => {
@@ -28,16 +27,16 @@ exports.changeProject = function (obj) {
     })
 }
 
-/**
- * 查看变更申请
- */
-exports.lookApply = function () {
+ /**
+  * 查看提交报告
+  */
+ exports.lookReport = function (obj) {
     return new Promise((res, rej) => {
         var conn = createConnection();
         conn.connect();
 
-        var sql = 'select * from ChangeRequest where state = 0';
-        conn.query(sql,(err,result) => {
+        var sql = 'select * from ProcessDocuments where state = 0';
+        conn.query(sql, (err,result) => {
             if (err) {
                 rej(err)
             }
