@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../resources/plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../resources/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
+
+</head>
+
+<body>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="projectID" class="col-sm-2 control-label">项目编号</label>
+            <div class="col-sm-10 col-md-6">
+                <input type="text" class="form-control" id="projectID" placeholder="项目编号" name="projectID">
+            </div>
+        </div>
+
+        <!-- 分类 -->
+        <div class="form-group">
+            <label for="type" class="col-sm-2 control-label">分类</label>
+            <div class="col-sm-10 col-md-4">
+                <select name="" id="type">
+                    <option value="1">中检报告</option>
+                    <option value="2">结题报告</option>
+                </select>
+            </div>
+        </div>
+
+        
+        <div class="form-group">
+            <label for="file" class="col-sm-2 control-label">上传文件</label>
+            <div class="col-sm-10 col-md-6">
+                <input type="file" id="file">
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary col-md-offset-2">Submit</button>
+    </form>
+
+    <script src="../resources/plugins/jquery.1.12.4.min.js"></script>
+    <script src="../resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+    <script src="../resources/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="../resources/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
+
+    <script>
+
+        $('.btn').click( function (){
+            var projectID = $('#projectID').val();
+            var type = $('#type').val();
+            var file = $("#file")[0].files[0];
+            var teacherName = sessionStorage.getItem('teacherName')
+            var teacherID = sessionStorage.getItem('teacherID')
+
+
+            var form = new FormData();
+
+            form.append('projectID',projectID)
+            form.append('type',type)
+            form.append('file',file)
+            form.append('teacherName',teacherName)
+            form.append('teacherID',teacherID)
+
+            $.ajax({
+                type: 'post',
+                url: '/user/project/submitReport',
+                contentType: false,
+                processData: false,
+                data: form,
+                success(){
+                    alert('提交成功')
+                    $('form')[0].reset();
+                },
+                error(){
+                    console.log('err')
+                }
+            })
+
+
+        })
+
+        
+    </script>
+</body>
+
+</html>

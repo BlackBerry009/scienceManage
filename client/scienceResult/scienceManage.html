@@ -22,50 +22,20 @@
 		<table id="table"></table>
 	</div>
 	<!-- 模态框 -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-							aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">编辑</h4>
-				</div>
-				<div class="modal-body">
-					<form>
-						<div class="form-group">
-							<label for="pname" class="col-form-label">项目名称</label>
-							<input type="text" name="pname" id="pname" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="type" class="col-form-label">类别</label>
-							<input type="text" name="type" id="type" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="subject" class="col-form-label">学科</label>
-							<input type="text" name="subject" id="subject" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="money" class="col-form-label">预算</label>
-							<input type="text" name="money" id="money" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="check" class="col-form-label">审核</label>
-							<input type="text" name="check" id="check" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="suggest" class="col-form-label">意见</label>
-							<input type="text" name="suggest" id="suggest" class="form-control">
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal"><span class=""
-							aria-hidden="true"></span>关闭</button>
-					<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class=""
-							aria-hidden="true"></span>保存</button>
-				</div>
-			</div>
+	<div id="createDialog" class="crudDialog" hidden>
+		审核<div class="mb-20">
+			<label class="radio-inline">
+				<input type="radio" name="inlineRadioOptions" value="yes"> 同意
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="inlineRadioOptions" value="no"> 不同意
+			</label>
 		</div>
+
+		意见: <div>
+			<textarea id="issue" cols="30" rows="3"></textarea>
+		</div>
+
 	</div>
 
 	<script src="../resources/plugins/jquery.1.12.4.min.js"></script>
@@ -89,7 +59,8 @@
 			// bootstrap table初始化
 			// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
 			$table.bootstrapTable({
-				url: '../resources/data/manage.json',
+				url: '/manager/lookCheckResult',
+				type: 'get',
 				height: getHeight(),
 				striped: true,
 				search: true,
@@ -99,8 +70,6 @@
 				showColumns: true,
 				minimumCountColumns: 2,
 				showPaginationSwitch: true,
-				clickToSelect: true,
-				detailView: true,
 				detailFormatter: 'detailFormatter',
 				pagination: true,
 				paginationLoop: false,
@@ -116,28 +85,27 @@
 				idField: 'systemId',
 				maintainSelected: true,
 				toolbar: '#toolbar',
-				columns: [
-					{
+				columns: [{
 						field: 'id',
 						title: '序号',
 						sortable: true,
 						align: 'center'
 					},
 					{
-						field: 'pname',
+						field: 'title',
 						title: '成果名称',
 						sortable: true,
 						align: 'center'
-                    },
-                    {
-						field: 'pname',
+					},
+					{
+						field: 'teacherName',
 						title: '负责人',
 						sortable: true,
 						align: 'center'
-                    },
-                    {
-						field: 'pname',
-						title: '成员',
+					},
+					{
+						field: 'teacherID',
+						title: '工号',
 						sortable: true,
 						align: 'center'
 					},
@@ -153,19 +121,16 @@
 						sortable: true,
 						align: 'center',
 						formatter: 'download'
-                    },
-                    {
-						field: 'pname',
-						title: '申请用户',
-						sortable: true,
-						align: 'center'
-                    },
-                    {
-						field: 'pname',
-						title: '单位',
-						sortable: true,
-						align: 'center'
-                    },
+					},
+					{
+						field: 'action',
+						title: '操作',
+						align: 'center',
+						align: 'center',
+						formatter: 'actionFormatter',
+						events: 'actionEvents',
+						clickToSelect: false
+					}
 				]
 			}).on('all.bs.table', function (e, name, args) {
 				$('[data-toggle="tooltip"]').tooltip();
@@ -173,11 +138,50 @@
 			});
 		});
 
-		function download(value, row, index) {
-			return `<a href="#" style="color:blue" download>下载</a>`
+		function download(value, row) {
+			return `<a href="/manager/download?path=./${row.filePath}" style="color:blue" download="${row.fileName}">下载</a>`
 		}
 
-	
+		function actionFormatter(value, row, index) {
+			return [
+				'<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" style="color:green">通过</a>　',
+				'<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" style="color:red">拒绝</a>　'
+
+			].join('');
+		}
+
+		window.actionEvents = {
+			'click .edit': function (e, value, row, index) {
+				$.ajax({
+					url: '/manager/result/agree',
+					type: 'post',
+					data: {
+						id: row.id
+					},
+					success(res) {
+						alert('提交成功')
+					},
+					error() {
+						console.log('error')
+					}
+				})
+			},
+			'click .remove': function (e, value, row, index) {
+				$.ajax({
+					url: '/manager/result/reject',
+					type: 'post',
+					data: {
+						id: row.id
+					},
+					success(res) {
+						alert('提交成功')
+					},
+					error() {
+						console.log('error')
+					}
+				})
+			},
+		};
 
 		function detailFormatter(index, row) {
 			var html = [];

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>项目变更申请</title>
     <link href="../resources/plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../resources/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
 
@@ -14,9 +14,9 @@
     <form class="form-horizontal">
 
         <div class="form-group">
-            <label for="projectNumber" class="col-sm-2 control-label">项目编号</label>
+            <label for="projectID" class="col-sm-2 control-label">项目编号</label>
             <div class="col-sm-10 col-md-6">
-                <input type="text" class="form-control" id="projectNumber" placeholder="项目编号" name="projectNumber">
+                <input type="text" class="form-control" id="projectID" placeholder="项目编号" name="projectID">
             </div>
         </div>
 
@@ -42,11 +42,6 @@
             </div>
         </div>
 
-
-       
-
-    
-
         <button type="button" class="btn btn-primary col-md-offset-2">Submit</button>
     </form>
 
@@ -58,8 +53,30 @@
     <script>
 
         $('.btn').click( function (){
-            var a = $('form').serializeArray();
-            console.log(a)
+            var projectID = $("#projectID").val();
+            var projectName = $('#projectName').val();
+            var teacherName = $('#teacherName').val();
+            var changeContent = $('#changeContent').val();
+            var teacherID = sessionStorage.getItem('teacherID');
+            var obj = {
+                projectName,
+                projectID,
+                teacherName,
+                teacherID,
+                changeContent
+            }
+            $.ajax({
+                url: '/user/project/change',
+                type: 'post',
+                data: obj,
+                success(){
+                    alert('申请成功')
+                },
+                error(){
+                    alert('申请失败')
+                }
+            })
+            
         })
 
    

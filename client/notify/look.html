@@ -21,52 +21,7 @@
 
 		<table id="table"></table>
 	</div>
-	<!-- 模态框 -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-							aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">编辑</h4>
-				</div>
-				<div class="modal-body">
-					<form>
-						<div class="form-group">
-							<label for="pname" class="col-form-label">项目名称</label>
-							<input type="text" name="pname" id="pname" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="type" class="col-form-label">类别</label>
-							<input type="text" name="type" id="type" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="subject" class="col-form-label">学科</label>
-							<input type="text" name="subject" id="subject" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="money" class="col-form-label">预算</label>
-							<input type="text" name="money" id="money" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="check" class="col-form-label">审核</label>
-							<input type="text" name="check" id="check" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="suggest" class="col-form-label">意见</label>
-							<input type="text" name="suggest" id="suggest" class="form-control">
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal"><span class=""
-							aria-hidden="true"></span>关闭</button>
-					<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class=""
-							aria-hidden="true"></span>保存</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 
 	<script src="../resources/plugins/jquery.1.12.4.min.js"></script>
 	<script src="../resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
@@ -89,7 +44,11 @@
 			// bootstrap table初始化
 			// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
 			$table.bootstrapTable({
-				url: '../resources/data/manage.json',
+				url: '/user/notice/look',
+				method: 'get',
+				queryParams: {
+					teacherID: sessionStorage.getItem('teacherID')
+				},
 				height: getHeight(),
 				striped: true,
 				search: true,
@@ -99,8 +58,8 @@
 				showColumns: true,
 				minimumCountColumns: 2,
 				showPaginationSwitch: true,
-				// clickToSelect: true,
-				detailView: true,
+				clickToSelect: true,
+				// detailView: true,
 				detailFormatter: 'detailFormatter',
 				pagination: true,
 				paginationLoop: false,
@@ -118,64 +77,25 @@
 				toolbar: '#toolbar',
 				columns: [
 					{
-						field: 'id',
-						title: '序号',
+						field: 'title',
+						title: '通知名称',
 						sortable: true,
 						align: 'center'
-					},
-					{
-						field: 'pid',
-						title: '项目编号',
-						align: 'center'
-					},
-					{
-						field: 'pname',
-						title: '项目名称',
+                    },
+                    {
+						field: 'content',
+						title: '通知内容',
 						sortable: true,
 						align: 'center'
-					},
-					{
-						field: 'subject',
-						title: '性质',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'money',
-						title: '预算',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'start',
-						title: '开始时间',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'end',
-						title: '结束时间',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: '',
-						title: '下载',
+                    },
+                    {
+						field: 'time',
+						title: '发布时间',
 						sortable: true,
 						align: 'center',
-						formatter: 'download'
-					},
-					{
-						field: 'check',
-						title: '审核',
-						sortable: true,
-						align: 'center'
-					},
-					{
-						field: 'check',
-						title: '状态',
-						sortable: true,
-						align: 'center'
+						formatter(value,row){
+							return value.split('T')[0]
+						}
 					}
 				]
 			}).on('all.bs.table', function (e, name, args) {
@@ -183,10 +103,6 @@
 				$('[data-toggle="popover"]').popover();
 			});
 		});
-
-		function download(value, row, index) {
-			return `<a href="#" style="color:blue" download>下载</a>`
-		}
 
 
 		function detailFormatter(index, row) {
@@ -197,6 +113,7 @@
 			return html.join('');
 		}
 	</script>
+
 </body>
 
 </html>

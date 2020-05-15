@@ -21,52 +21,7 @@
 
 		<table id="table"></table>
 	</div>
-	<!-- 模态框 -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-							aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">编辑</h4>
-				</div>
-				<div class="modal-body">
-					<form>
-						<div class="form-group">
-							<label for="pname" class="col-form-label">项目名称</label>
-							<input type="text" name="pname" id="pname" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="type" class="col-form-label">类别</label>
-							<input type="text" name="type" id="type" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="subject" class="col-form-label">学科</label>
-							<input type="text" name="subject" id="subject" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="money" class="col-form-label">预算</label>
-							<input type="text" name="money" id="money" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="check" class="col-form-label">审核</label>
-							<input type="text" name="check" id="check" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="suggest" class="col-form-label">意见</label>
-							<input type="text" name="suggest" id="suggest" class="form-control">
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal"><span class=""
-							aria-hidden="true"></span>关闭</button>
-					<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class=""
-							aria-hidden="true"></span>保存</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 
 	<script src="../resources/plugins/jquery.1.12.4.min.js"></script>
 	<script src="../resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
@@ -89,7 +44,8 @@
 			// bootstrap table初始化
 			// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
 			$table.bootstrapTable({
-				url: '../resources/data/manage.json',
+				url: '/manager/project/allProject',
+				type: 'get',
 				height: getHeight(),
 				striped: true,
 				search: true,
@@ -100,7 +56,7 @@
 				minimumCountColumns: 2,
 				showPaginationSwitch: true,
 				// clickToSelect: true,
-				detailView: true,
+				// detailView: true,
 				detailFormatter: 'detailFormatter',
 				pagination: true,
 				paginationLoop: false,
@@ -123,58 +79,68 @@
 						align: 'center'
 					},
 					{
-						field: 'pname',
+						field: 'projectName',
 						title: '项目名称',
 						sortable: true,
 						align: 'center'
                     },
                     {
-						field: 'pname',
+						field: 'projectContent',
 						title: '项目概述',
 						sortable: true,
 						align: 'center'
 					},
 					{
-						field: 'subject',
+						field: 'type',
 						title: '性质',
 						sortable: true,
-						align: 'center'
+						align: 'center',
+						formatter(value){
+							if(value == 0) return '纵向'
+							if(value == 1) return '横向'
+						}
                     },
                     {
-						field: 'pname',
+						field: 'teacherName',
 						title: '负责人',
 						sortable: true,
 						align: 'center'
                     },
                     {
-						field: 'pname',
+						field: 'projectMembers',
 						title: '成员',
 						sortable: true,
 						align: 'center'
-                    },
-                    {
-						field: 'pname',
+					},
+					{
+						field: 'section',
 						title: '单位',
 						sortable: true,
 						align: 'center'
 					},
 					{
-						field: 'money',
+						field: 'funds',
 						title: '预算',
 						sortable: true,
 						align: 'center'
 					},
 					{
-						field: 'start',
+						field: 'startTime',
 						title: '开始时间',
 						sortable: true,
-						align: 'center'
+						align: 'center',
+						formatter(value){
+							return value.split('T')[0]
+						}
 					},
 					{
-						field: 'end',
+						field: 'endTime',
 						title: '结束时间',
 						sortable: true,
-						align: 'center'
+						align: 'center',
+						formatter(value){
+							return value.split('T')[0]
+						}
 					},
 					{
 						field: '',
@@ -182,16 +148,8 @@
 						sortable: true,
 						align: 'center',
 						formatter: 'download'
-					},
-					{
-						field: 'action',
-						title: '审核',
-						halign: 'center',
-						align: 'center',
-						formatter: 'actionFormatter',
-						events: 'actionEvents',
-						clickToSelect: false
-					}
+                    }
+					
 				]
 			}).on('all.bs.table', function (e, name, args) {
 				$('[data-toggle="tooltip"]').tooltip();
@@ -199,26 +157,9 @@
 			});
 		});
 
-		function actionFormatter(value, row, index) {
-			return [
-				'<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip">修改</a>　',
-				'<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip">中检</a>'
-			].join('');
-		}
 
-		window.actionEvents = {
-			'click .edit': function (e, value, row, index) {
-				alert('You click edit icon, row: ' + JSON.stringify(row));
-				console.log(value, row, index);
-			},
-			'click .remove': function (e, value, row, index) {
-				alert('You click remove icon, row: ' + JSON.stringify(row));
-				console.log(value, row, index);
-			}
-		};
-
-		function download(value, row, index) {
-			return `<a href="#" style="color:blue" download>下载</a>`
+		function download(value, row) {
+			return `<a href="/manager/download?path=./${row.filePath}" style="color:blue" download="${row.fileName}">下载</a>`
 		}
 
 

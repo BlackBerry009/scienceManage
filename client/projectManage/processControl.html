@@ -89,7 +89,8 @@
 			// bootstrap table初始化
 			// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
 			$table.bootstrapTable({
-				url: '../resources/data/manage.json',
+				url: '/manager/project/processProject',
+				type: 'get',
 				height: getHeight(),
 				striped: true,
 				search: true,
@@ -100,7 +101,7 @@
 				minimumCountColumns: 2,
 				showPaginationSwitch: true,
 				// clickToSelect: true,
-				detailView: true,
+				// detailView: true,
 				detailFormatter: 'detailFormatter',
 				pagination: true,
 				paginationLoop: false,
@@ -123,58 +124,68 @@
 						align: 'center'
 					},
 					{
-						field: 'pname',
+						field: 'projectName',
 						title: '项目名称',
 						sortable: true,
 						align: 'center'
                     },
                     {
-						field: 'pname',
+						field: 'projectContent',
 						title: '项目概述',
 						sortable: true,
 						align: 'center'
 					},
 					{
-						field: 'subject',
+						field: 'type',
 						title: '性质',
 						sortable: true,
-						align: 'center'
+						align: 'center',
+						formatter(value){
+							if(value == 0) return '纵向'
+							if(value == 1) return '横向'
+						}
                     },
                     {
-						field: 'pname',
+						field: 'teacherName',
 						title: '负责人',
 						sortable: true,
 						align: 'center'
                     },
                     {
-						field: 'pname',
+						field: 'projectMembers',
 						title: '成员',
 						sortable: true,
 						align: 'center'
-					},
-					{
-						field: 'pname',
+                    },
+                    {
+						field: 'section',
 						title: '单位',
 						sortable: true,
 						align: 'center'
 					},
 					{
-						field: 'money',
+						field: 'funds',
 						title: '预算',
 						sortable: true,
 						align: 'center'
 					},
 					{
-						field: 'start',
+						field: 'startTime',
 						title: '开始时间',
 						sortable: true,
-						align: 'center'
+						align: 'center',
+						formatter(value){
+							return value.split('T')[0]
+						}
 					},
 					{
-						field: 'end',
+						field: 'endTime',
 						title: '结束时间',
 						sortable: true,
-						align: 'center'
+						align: 'center',
+						formatter(value){
+							return value.split('T')[0]
+						}
 					},
 					{
 						field: '',
@@ -186,7 +197,7 @@
 					{
 						field: 'action',
 						title: '审核',
-						halign: 'center',
+						align: 'center',
 						align: 'center',
 						formatter: 'actionFormatter',
 						events: 'actionEvents',
@@ -201,8 +212,8 @@
 
 		function actionFormatter(value, row, index) {
 			return [
-				'<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" style="color:#32CD32">通过</a>　',
-				'<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" style="color:red">拒绝</a>'
+				'<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip">修改</a>　',
+				'<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip">中检</a>'
 			].join('');
 		}
 
@@ -217,8 +228,8 @@
 			}
 		};
 
-		function download(value, row, index) {
-			return `<a href="#" style="color:blue" download>下载</a>`
+		function download(value, row) {
+			return `<a href="/manager/download?path=./${row.filePath}" style="color:blue" download="${row.fileName}">下载</a>`
 		}
 
 

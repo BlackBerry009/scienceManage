@@ -28,15 +28,15 @@
 
         <!-- 性质分类 -->
         <div class="form-group">
-            <label for="typeSubject" class="col-sm-2 control-label">性质</label>
+            <label for="type" class="col-sm-2 control-label">性质</label>
             <div class="col-sm-10 col-md-4">
-                <select name="" id="typeSubject">
-                    <option value="">横向</option>
-                    <option value="">纵向</option>
+                <select name="type" id="type">
+                    <option value="1">横向</option>
+                    <option value="0">纵向</option>
                 </select>
             </div>
         </div>
-        
+
         <div class="form-group">
             <label for="teacherName" class="col-sm-2 control-label">项目负责人</label>
             <div class="col-sm-10 col-md-6">
@@ -50,6 +50,16 @@
                 <input type="text" class="form-control" id="projectMembers" placeholder="项目负责人" name="projectMembers">
             </div>
         </div>
+
+        <!-- 性质分类 -->
+        <div class="form-group">
+            <label for="section" class="col-sm-2 control-label">申请部门</label>
+            <div class="col-sm-10 col-md-4">
+                <select name="section" id="section">
+                </select>
+            </div>
+        </div>
+
 
 
         <div class="form-group">
@@ -73,11 +83,11 @@
             </div>
         </div>
 
-        
+
         <div class="form-group">
-            <label for="applyForm" class="col-sm-2 control-label">上传申请书</label>
+            <label for="file" class="col-sm-2 control-label">上传申请书</label>
             <div class="col-sm-10 col-md-6">
-                <input type="file" id="applyForm">
+                <input type="file" id="file">
             </div>
         </div>
         <button type="button" class="btn btn-primary col-md-offset-2">Submit</button>
@@ -89,10 +99,64 @@
     <script src="../resources/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
 
     <script>
+        $.ajax({
+            type: 'get',
+            url: '/common/allSection',
+            success(res) {
+                var str = '';
+                res.data.forEach( item => {
+                    var temp = `<option value="${item.sectionName}">${item.sectionName}</option>`;
+                    str += temp;
+                })
+                var section = document.getElementById('section');            
+                section.innerHTML = str;
+            },
+            error() {
+                console.log('err')
+            }
+        })
 
-        $('.btn').click( function (){
-            var a = $('form').serializeArray();
-            console.log(a)
+
+
+        $('.btn').click(function () {
+            var teacherID = sessionStorage.getItem('teacherID');
+            var projectName = $('#projectName').val();
+            var projectContent = $('#projectContent').val();
+            var type = $('#type').val();
+            var teacherName = $('#teacherName').val();
+            var projectMembers = $('#projectMembers').val();
+            var section = $('#section').val();
+            var funds = $('#pMoney').val();
+            var startTime = $('#start').val();
+            var endTime = $('#end').val();
+            var file = $('#file')[0].files[0];
+            var form = new FormData();
+            form.append('teacherID', teacherID)
+            form.append('teacherName', teacherName)
+            form.append('section', section)
+            form.append('projectMembers', projectMembers)
+            form.append('projectName', projectName)
+            form.append('type', type)
+            form.append('projectContent', projectContent)
+            form.append('funds', funds)
+            form.append('startTime', startTime)
+            form.append('endTime', endTime)
+            form.append('file', file)
+
+            $.ajax({
+                type: 'post',
+                url: '/user/project/add',
+                contentType: false,
+                processData: false,
+                data: form,
+                success(res) {
+                    alert('提交成功')
+                    $('.form-horizontal')[0].reset();
+                },
+                error() {
+                    console.log('err')
+                }
+            })
         })
 
         $('#start').datetimepicker({

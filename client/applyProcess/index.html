@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>审批流程</title>
+    <link href="../resources/plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../resources/plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css"
+        rel="stylesheet" />
+    <link href="../resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.css" rel="stylesheet" />
+    <link href="../resources/plugins/waves-0.7.5/waves.min.css" rel="stylesheet" />
+    <link href="../resources/plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+    <link href="../resources/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="../resources/css/common.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="main">
+
+        <table id="table"></table>
+
+        <!-- 模态框 -->
+        <div id="createDialog" class="crudDialog" hidden>
+            审核流程：<div>
+                <select id="">
+                    <option value="1">一级审批</option>
+                    <option value="2">二级审批</option>
+                    <option value="3">三级审批</option>
+                    <option value="4">四级审批</option>
+                </select>
+            </div>
+
+            结题流程：<div>
+                <select id="">
+                    <option value="1">一级审批</option>
+                    <option value="2">二级审批</option>
+                    <option value="3">三级审批</option>
+                    <option value="4">四级审批</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script src="../resources/plugins/jquery.1.12.4.min.js"></script>
+    <script src="../resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+    <script src="../resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.js"></script>
+    <script src="../resources/plugins/bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../resources/plugins/waves-0.7.5/waves.min.js"></script>
+    <script src="../resources/plugins/jquery-confirm/jquery-confirm.min.js"></script>
+    <script src="../resources/plugins/select2/js/select2.min.js"></script>
+    <script src="../resources/js/common.js"></script>
+    <script>
+        var $table = $('#table');
+        $(function () {
+            $(document).on('focus', 'input[type="text"]', function () {
+                $(this).parent().find('label').addClass('active');
+            }).on('blur', 'input[type="text"]', function () {
+                if ($(this).val() == '') {
+                    $(this).parent().find('label').removeClass('active');
+                }
+            });
+            // bootstrap table初始化
+            // http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
+            $table.bootstrapTable({
+                url: '/manager/project/noSet',
+                type: 'get',
+                height: getHeight(),
+                striped: true,
+                search: true,
+                searchOnEnterKey: true,
+                showRefresh: true,
+                showToggle: true,
+                showColumns: true,
+                minimumCountColumns: 2,
+                showPaginationSwitch: true,
+                // clickToSelect: true,
+                // detailView: true,
+                detailFormatter: 'detailFormatter',
+                pagination: true,
+                paginationLoop: false,
+                classes: 'table table-hover table-no-bordered',
+                // sidePagination: 'server',
+                //silentSort: false,
+                smartDisplay: false,
+                idField: 'id',
+                sortName: 'id',
+                sortOrder: 'desc',
+                escape: true,
+                searchOnEnterKey: true,
+                idField: 'systemId',
+                maintainSelected: true,
+                toolbar: '#toolbar',
+                columns: [{
+                        field: 'id',
+                        title: '序号',
+                        sortable: true,
+                        align: 'center'
+                    },
+                    {
+                        field: 'projectName',
+                        title: '项目名称',
+                        sortable: true,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: '性质',
+                        sortable: true,
+                        align: 'center',
+                        formatter(value) {
+                            if (value == 0) return '纵向'
+                            if (value == 1) return '横向'
+                        }
+                    },
+                    {
+                        field: 'teacherName',
+                        title: '负责人',
+                        sortable: true,
+                        align: 'center'
+                    },
+                    {
+                        field: 'section',
+                        title: '单位',
+                        sortable: true,
+                        align: 'center'
+                    },
+                    {
+                        field: 'action',
+                        title: '操作',
+                        halign: 'center',
+                        align: 'center',
+                        formatter: 'actionFormatter',
+                        events: 'actionEvents',
+                        clickToSelect: false
+                    }
+                ]
+            }).on('all.bs.table', function (e, name, args) {
+                $('[data-toggle="tooltip"]').tooltip();
+                $('[data-toggle="popover"]').popover();
+            });
+        });
+
+        function actionFormatter(value, row, index) {
+            return [
+                '<span class="edit ml10" style="cursor:pointer" data-toggle="tooltip">设置审批</span>　'
+            ].join('');
+        }
+
+        window.actionEvents = {
+            'click .edit': function (e, value, row, index) {
+                $.confirm({
+                    type: 'blue',
+                    animationSpeed: 300,
+                    title: '审核',
+                    content: `<div id="createDialog" class="crudDialog" >
+                                审核流程：<div >
+                                    <select id="check">
+                                        <option value="1">一级审批</option>
+                                        <option value="2">二级审批</option>
+                                        <option value="3">三级审批</option>
+                                        <option value="4">四级审批</option>
+                                    </select>
+                                </div>
+
+                                结题流程：<div >
+                                    <select id="end">
+                                        <option value="1">一级审批</option>
+                                        <option value="2">二级审批</option>
+                                        <option value="3">三级审批</option>
+                                        <option value="4">四级审批</option>
+                                    </select>
+                                </div>
+                            </div>`,
+                    buttons: {
+                        confirm: {
+                            text: '确认',
+                            btnClass: 'waves-effect waves-button',
+                            action: function () {
+                                var obj = {
+                                    check: $('#check').val(),
+                                    end: $('#end').val(),
+                                    id: row.id
+                                }
+                                $.ajax({
+                                    url: '/manager/setProcess',
+                                    data: obj,
+                                    type: 'post',
+                                    success(res){
+                                        console.log(res)
+                                    },
+                                    error(){
+                                        console.log('error')
+                                    }
+                                })
+                            }
+                        },
+                        cancel: {
+                            text: '取消',
+                            btnClass: 'waves-effect waves-button'
+                        }
+                    }
+                });
+            },
+        };
+
+        function download(value, row) {
+            return `<a href="/manager/download?path=./${row.filePath}" style="color:blue" download="${row.fileName}">下载</a>`
+        }
+
+
+        function detailFormatter(index, row) {
+            var html = [];
+            $.each(row, function (key, value) {
+                html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+            });
+            return html.join('');
+        }
+    </script>
+</body>
+
+</html>

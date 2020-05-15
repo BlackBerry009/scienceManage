@@ -89,7 +89,8 @@
 			// bootstrap table初始化
 			// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
 			$table.bootstrapTable({
-				url: '../resources/data/manage.json',
+				url: '/manager/lookReport',
+				type: 'get',
 				height: getHeight(),
 				striped: true,
 				search: true,
@@ -100,7 +101,7 @@
 				minimumCountColumns: 2,
 				showPaginationSwitch: true,
 				// clickToSelect: true,
-				detailView: true,
+				// detailView: true,
 				detailFormatter: 'detailFormatter',
 				pagination: true,
 				paginationLoop: false,
@@ -123,16 +124,26 @@
 						align: 'center'
 					},
 					{
-						field: 'pid',
+						field: 'projectID',
 						title: '项目编号',
+						sortable: true,
+						align: 'center'
+					},
+					{
+						field: 'teacherName',
+						title: '负责人',
 						sortable: true,
 						align: 'center'
                     },
 					{
-						field: 'subject',
+						field: 'type',
 						title: '分类',
 						sortable: true,
-						align: 'center'
+						align: 'center',
+						formatter(value){
+							if(value == 0) return '纵向'
+							if(value == 1) return '横向'
+						}
                     },
 					{
 						field: '',
@@ -150,9 +161,9 @@
 		});
 
 
-		function download(value, row, index) {
-			return `<a href="#" style="color:blue" download>下载</a>`
-        }
+		function download(value, row) {
+			return `<a href="/user/download?path=./${row.filePath}" style="color:blue" download="${row.fileName}">下载</a>`
+		}
 
 
 		function detailFormatter(index, row) {
