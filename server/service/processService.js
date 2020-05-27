@@ -36,6 +36,15 @@ exports.hasChecked = async function (type) {
 }
 
 
+/**
+ * 删除
+ */
+exports.delete = async function (type) {
+    await processDao.delete(type)
+    return {ok:true}
+}
+
+
 
 
 

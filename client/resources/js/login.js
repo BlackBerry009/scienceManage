@@ -50,12 +50,22 @@ function login() {
 			}
 			//管理
 			if (res.type == 'manager') {
-				sessionStorage.setItem('type', 1)
+				if(result.position == '院级管理员'){
+					sessionStorage.setItem('type', 1)
+				} else {
+					sessionStorage.setItem('type', 11)
+				}
 				sessionStorage.setItem('teacherName', result.name)
 				sessionStorage.setItem('mid', result.mid)
-
 				sessionStorage.setItem('position', result.position)
 				sessionStorage.setItem('section', result.section)
+				window.location.href = '/index.html'
+			}
+
+			//超级管理
+			if (res.type == 'superManager') {
+				sessionStorage.setItem('type', 2)
+				sessionStorage.setItem('teacherName', result.name)
 				window.location.href = '/index.html'
 			}
 			

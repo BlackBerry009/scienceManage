@@ -107,3 +107,25 @@ exports.hasChecked = function (type) {
         conn.end(); 
     })
 }
+
+
+/**
+ * 删除
+ */
+exports.delete = function (type) {
+    return new Promise((res, rej) => {
+        var conn = createConnection();
+        conn.connect();
+        var sql = 'delete from Process where setLevel = currentLevel and type = ?';
+        var params = [type];
+        conn.query(sql, params)
+        conn.end(err => {
+            if (err) {
+                rej(err)
+            }
+            else {
+                res();
+            }
+        }); 
+    })
+}

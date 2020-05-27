@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>院级项目统计</title>
+	<link href="../resources/plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="../resources/plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css"
+		rel="stylesheet" />
+	<!-- <link href="../resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.css" rel="stylesheet" /> -->
+	<!-- <link href="../resources/plugins/waves-0.7.5/waves.min.css" rel="stylesheet" /> -->
+	<!-- <link href="../resources/plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" /> -->
+	<!-- <link href="../resources/plugins/select2/css/select2.min.css" rel="stylesheet" /> -->
+	<!-- <link href="../resources/css/common.css" rel="stylesheet" /> -->
+	<style>
+		.container {
+			margin: 100px;
+		}
+
+		.histogram {
+			margin-bottom: 100px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="main">
+
+		<div class="container">
+			<select id="year">
+			</select>
+			<button class="btn1">搜索</button>
+			<div class="histogram" style="width: 600px;height:400px;"></div>
+			<div class="pie-chart" style="width: 600px;height:400px;"></div>
+		</div>
+	</div>
+
+
+	<script src="../resources/plugins/jquery.1.12.4.min.js"></script>
+	<script src="../resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+	<script src="../resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.js"></script>
+	<script src="../resources/plugins/bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
+	<!-- <script src="../resources/plugins/waves-0.7.5/waves.min.js"></script> -->
+	<!-- <script src="../resources/plugins/jquery-confirm/jquery-confirm.min.js"></script> -->
+	<!-- <script src="../resources/plugins/select2/js/select2.min.js"></script> -->
+	<!-- <script src="../resources/js/common.js"></script> -->
+	<!-- <script>
+		var $table = $('#table');
+		$(function () {
+			$(document).on('focus', 'input[type="text"]', function () {
+				$(this).parent().find('label').addClass('active');
+			}).on('blur', 'input[type="text"]', function () {
+				if ($(this).val() == '') {
+					$(this).parent().find('label').removeClass('active');
+				}
+			});
+			// bootstrap table初始化
+			// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
+			$table.bootstrapTable({
+				url: '/manager/projectBySection',
+				type: 'get',
+				height: getHeight(),
+				striped: true,
+				search: true,
+				searchOnEnterKey: true,
+				showRefresh: true,
+				showToggle: true,
+				showColumns: true,
+				minimumCountColumns: 2,
+				showPaginationSwitch: true,
+				// clickToSelect: true,
+				// detailView: true,
+				detailFormatter: 'detailFormatter',
+				pagination: true,
+				paginationLoop: false,
+				classes: 'table table-hover table-no-bordered',
+				// sidePagination: 'server',
+				//silentSort: false,
+				smartDisplay: false,
+				idField: 'id',
+				sortName: 'id',
+				sortOrder: 'desc',
+				escape: true,
+				searchOnEnterKey: true,
+				idField: 'systemId',
+				maintainSelected: true,
+				toolbar: '#toolbar',
+				columns: [
+					{
+						field: 'section',
+						title: '院名',
+						sortable: true,
+						align: 'center'
+                    },
+                    {
+						field: 'applyCount',
+						title: '申报数量',
+						sortable: true,
+						align: 'center'
+					},
+					{
+						field: 'establishCount',
+						title: '立项数量',
+						sortable: true,
+						align: 'center',
+                    }
+				]
+			}).on('all.bs.table', function (e, name, args) {
+				$('[data-toggle="tooltip"]').tooltip();
+				$('[data-toggle="popover"]').popover();
+			});
+        });
+        
+		function detailFormatter(index, row) {
+			var html = [];
+			$.each(row, function (key, value) {
+				html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+			});
+			return html.join('');
+		}
+	</script> -->
+	<script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+
+	<script>
+		var histogram = echarts.init($('.histogram')[0]);
+		var pieChart = echarts.init($('.pie-chart')[0]);
+
+		$.ajax({
+			url: '/common/allYear',
+			type: 'get',
+			success(res) {
+				console.log(res)
+				var str = '';
+				res.data.forEach(item => {
+					var temp = `<option value="${item.year}">${item.year}</option>`;
+					str += temp;
+				})
+				var year = document.getElementById('year');
+				year.innerHTML = str;
+			}
+		})
+
+
+		$('.btn1').click(() => {
+			$.ajax({
+				url: '/manager/projectBySection',
+				type: 'get',
+				data: {
+					year: $("#year").val()
+				},
+				success(res) {
+					console.log(res.option)
+					histogram.setOption(res.option);
+				}
+			})
+		})
+
+		$.ajax({
+				url: '/common/typeProject',
+				type: 'get',
+				success(res) {
+					pieChart.setOption(res.option);
+				}
+			})
+	</script>
+</body>
+
+</html>

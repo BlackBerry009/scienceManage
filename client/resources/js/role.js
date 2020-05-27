@@ -28,7 +28,9 @@ window.onload = () => {
         //隐藏权限管理
         $('.system_1.6').hide(); 
     }
-    //管理员
+
+
+    //院管理员
     if(sessionStorage.getItem('type') == 1){
         //隐藏科研管理部分功能
         $('.system_1.0 ul .two').hide();
@@ -41,5 +43,37 @@ window.onload = () => {
         //隐藏通知部分功能
         $('.system_1.3 ul .one').hide();
 
+        $('.system_1.6').hide();
+        $('.system_1.5').hide();
+    }
+
+    // 其他
+    if(sessionStorage.getItem('type') == 11){
+        //隐藏科研管理部分功能
+        $('.system_1.0 ul .two').hide();
+        $('.system_1.0 ul .my').hide();
+        $('.system_1.0 ul .nine').hide();
+        $('.system_1.0 ul .ten').hide();
+        $('.system_1.0 ul .three').hide();
+        $('.system_1.0 ul .four').hide();
+
+        //隐藏科研成果功能
+        $('.system_1.2').hide();
+        //隐藏通知部分功能
+        $('.system_1.3').hide();
+        $('.system_1.4').hide();
+        $('.system_1.6').hide();
+        $('.system_1.5').hide();
+    }
+
+    /**
+     * 超级管理员
+     */
+    if(sessionStorage.getItem('type') == 2){
+        $('.system_1.0').hide();
+        $('.system_1.1').hide();
+        $('.system_1.2').hide();
+        $('.system_1.3').hide();
+        $('.system_1.4').hide();
     }
 }

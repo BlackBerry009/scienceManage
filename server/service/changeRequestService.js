@@ -15,3 +15,11 @@ exports.lookApply = async function(){
     var res = await changeRequestDao.lookApply();
     return {data:res}
 }
+
+/**
+ * 审核
+ */
+exports.check = async function(id,state){
+    var res = await changeRequestDao.check(id,state)
+    return {data:res}
+}

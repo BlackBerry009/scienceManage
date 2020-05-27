@@ -90,6 +90,9 @@
 			// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
 			$table.bootstrapTable({
 				url: '/manager/project/establishProject',
+				queryParams: {
+					section: sessionStorage.getItem('section')
+				},
 				type: 'get',
 				height: getHeight(),
 				striped: true,
@@ -219,7 +222,21 @@
 		}
 		
 		function handle(id){
-			console.log(id)
+			if( confirm('是否确认立项') ){
+				$.ajax({
+					url: '/manager/project/yesEstablish',
+					type: 'post',
+					data: {
+						id
+					},
+					success(res){
+						console.log('yes')
+					},
+					error(){
+						console.log('err')
+					}
+				})
+			}
 		}
 
 

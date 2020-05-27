@@ -49,3 +49,25 @@ exports.lookApply = function () {
         conn.end(); 
     })
 }
+
+/**
+ *  审核
+ */
+exports.check = function (id,state) {
+    return new Promise((res, rej) => {
+        var conn = createConnection();
+        conn.connect();
+        var sql = 'update ChangeRequest set state = ? where id = ?';
+        var params = [state,id]
+        conn.query(sql,params,(err,result) => {
+            if (err) {
+                rej(err)
+            }
+            else {
+                res(result);
+            }
+        })
+
+        conn.end(); 
+    })
+}

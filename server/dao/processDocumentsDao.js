@@ -12,7 +12,7 @@ exports.submitReport = function (obj) {
         var conn = createConnection();
         conn.connect();
 
-        var sql = 'insert into ProcessDocuments(teacherID,teacherName,projectID,type,state,fileName,filePath) values (?,?,?,?,?)';
+        var sql = 'insert into ProcessDocuments(teacherID,teacherName,projectID,type,state,fileName,filePath) values (?,?,?,?,?,?,?)';
         var params = [obj.teacherID,obj.teacherName,obj.projectID, obj.type, 0,obj.fileName,obj.filePath];
         conn.query(sql, params)
 
@@ -37,6 +37,31 @@ exports.submitReport = function (obj) {
 
         var sql = 'select * from ProcessDocuments where state = 0';
         conn.query(sql, (err,result) => {
+            if (err) {
+                rej(err)
+            }
+            else {
+                res(result);
+            }
+        })
+
+        conn.end(); 
+    })
+}
+
+
+/**
+  * 审核  提交报告
+  * 通过或拒绝
+  */
+ exports.checkReport = function (id,state) {
+    return new Promise((res, rej) => {
+        var conn = createConnection();
+        conn.connect();
+
+        var sql = 'update ProcessDocuments set state = ? where ID = ?';
+        var params = [state,id]
+        conn.query(sql, params,(err,result) => {
             if (err) {
                 rej(err)
             }

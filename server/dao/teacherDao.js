@@ -22,3 +22,24 @@ exports.lookPassword = function (teacherID) {
     })
 }
 
+/**
+ * 注册
+ */
+exports.register = function (teacherID,teacherName,password,section,phone) {
+    return new Promise((res, rej) => {
+        var conn = createConnection();
+        conn.connect();
+        var sql = 'insert into Teacher(`teacherID`,`teacherName`,`password`,`section`,`phone`) values (?,?,?,?,?)';
+        var params = [teacherID,teacherName,password,section,phone];
+        conn.query(sql, params,(err,result) => {
+            if (err) {
+                rej(err)
+            }
+            else {
+                res(result);
+            }
+        })
+        conn.end(); 
+    })
+}
+

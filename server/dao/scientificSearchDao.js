@@ -8,10 +8,9 @@ exports.applyResults = function (obj) {
         var conn = createConnection();
         conn.connect();
 
-        var sql = 'insert into ScientificResearch(teacherID,teacherName,ptitle,type,state,fileName,filePath) values (?,?,?,?,?,?,?,?)';
+        var sql = 'insert into ScientificResearch(teacherID,teacherName,title,type,state,fileName,filePath) values (?,?,?,?,?,?,?)';
         var params = [obj.teacherID, obj.teacherName, obj.title, obj.type, 0, obj.fileName, obj.filePath];
         conn.query(sql, params)
-
         conn.end(err => {
             if (err) {
                 rej(err)

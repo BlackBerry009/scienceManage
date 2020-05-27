@@ -119,6 +119,7 @@ router.get('/scientificSearch/myResults',async (req,res) => {
 
 router.get('/notice/look',async (req,res) => {
     var result = await noticeDaoService.lookNotice(req.query.teacherID);
+    console.log(result)
     res.send(result)
 })
 

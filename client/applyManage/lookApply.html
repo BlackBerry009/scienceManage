@@ -138,32 +138,50 @@
 
 		function actionFormatter(value, row, index) {
 			return [
-				'<span class="edit ml10" style="cursor:pointer" data-toggle="tooltip">审核</span>　'
+				'<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" style="color:green">通过</a>　',
+				'<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" style="color:red">拒绝</a>'
 			].join('');
 		}
 
 		window.actionEvents = {
 			'click .edit': function (e, value, row, index) {
-				$.confirm({
-					type: 'blue',
-					animationSpeed: 300,
-					title: '审核',
-					content: $('#createDialog').html(),
-					buttons: {
-						confirm: {
-							text: '确认',
-							btnClass: 'waves-effect waves-button',
-							action: function () {
-								$.alert('提交成功');
-							}
+				let msg = '确定通过审核吗'
+				if (confirm(msg)) {
+					$.ajax({
+						url: '/manager/change/check',
+						type: 'post',
+						data: {
+							pid: row.id,
+							state: 1
 						},
-						cancel: {
-							text: '取消',
-							btnClass: 'waves-effect waves-button'
+						success(res){
+							console.log('success')
+						},
+						error(){
+							console.log('error')
 						}
-					}
-				});
+					})
+				}
 			},
+			'click .remove': function (e, value, row, index) {
+				let msg = '确定拒绝通过吗'
+				if (confirm(msg)) {
+					$.ajax({
+						url: '/manager/change/check',
+						type: 'post',
+						data: {
+							pid: row.id,
+							state: 2
+						},
+						success(res){
+							console.log('success')
+						},
+						error(){
+							console.log('error')
+						}
+					})
+				}
+			}
 		};
 
 

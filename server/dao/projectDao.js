@@ -152,23 +152,68 @@ exports.projectById = function(id){
 }
 
 /**
- * 需要立项的项目
+ * 更新项目状态by id
  */
-exports.establishProject = function(){
+exports.updateState = function(state,id){
     return new Promise((res, rej) => {
         var conn = createConnection();
         conn.connect();
-
-        var sql = '';
-        conn.query(sql,(err,result)=>{
+        var sql = 'update Project set state = ? where id = ?';
+        var params = [state,id]
+        conn.query(sql,params)
+        conn.end(err => {
             if (err) {
                 rej(err)
             }
             else {
-                res(result);
+                res();
             }
-        })
-        conn.end(); 
+        }); 
+    })
+}
+
+/**
+ * 更新项目状态by projectID
+ */
+exports.updateStateByProjectID = function(state,projectID){
+    return new Promise((res, rej) => {
+        var conn = createConnection();
+        conn.connect();
+        var sql = 'update Project set state = ? where projectID = ?';
+        var params = [state,projectID]
+        conn.query(sql,params)
+        conn.end(err => {
+            if (err) {
+                rej(err)
+            }
+            else {
+                res();
+            }
+        }); 
+    })
+}
+
+
+/**
+ * 生成项目编号
+ */
+exports.produceProjectID = function(id){
+    var date = new Date().getTime();
+    return new Promise((res, rej) => {
+        var conn = createConnection();
+        conn.connect();
+        var sql = 'update Project set projectID = ? where id = ?';
+        console.log(date)
+        var params = [date,id]
+        conn.query(sql,params)
+        conn.end(err => {
+            if (err) {
+                rej(err)
+            }
+            else {
+                res();
+            }
+        }); 
     })
 }
 
@@ -176,13 +221,14 @@ exports.establishProject = function(){
 /**
  * 进展管理的项目
  */
-exports.processProject = function(){
+exports.processProject = function(section){
     return new Promise((res, rej) => {
         var conn = createConnection();
         conn.connect();
 
-        var sql = 'select * from Project where state = 3';
-        conn.query(sql,(err,result)=>{
+        var sql = 'select * from Project where state = 3 and section = ?';
+        var params = [section]
+        conn.query(sql,params,(err,result)=>{
             if (err) {
                 rej(err)
             }
@@ -194,9 +240,26 @@ exports.processProject = function(){
     })
 }
 
- /**
-  * 结题的项目
-  */
+/**
+ * 项目 结题
+ */
+exports.endProject = function(section){
+    return new Promise((res, rej) => {
+        var conn = createConnection();
+        conn.connect();
+        var sql = 'select * from Project where state = 4 and section = ?';
+        var params = [section]
+        conn.query(sql,params,(err,result)=>{
+            if (err) {
+                rej(err)
+            }
+            else {
+                res(result);
+            }
+        })
+        conn.end(); 
+    })
+}
 
 
 
@@ -208,7 +271,7 @@ exports.allProject = function(){
         var conn = createConnection();
         conn.connect();
 
-        var sql = 'select * from Project where state >= 2';
+        var sql = 'select * from Project where state >= 3';
         conn.query(sql,(err,result)=>{
             if (err) {
                 rej(err)
@@ -221,6 +284,114 @@ exports.allProject = function(){
     })
 }
 
+
+/**
+ * 按 院统计项目
+ */
+exports.projectBySection = function(year){
+    return new Promise((res, rej) => {
+        var conn = createConnection();
+        conn.connect();
+        var sql = "select section as 'section', count(*) as '申报数量', count(state >= 3 or null) as '立项数量' from Project where year(startTime) = ? group by section; ";
+        var params = [year]
+        conn.query(sql,params,(err,result)=>{
+            if (err) {
+                rej(err)
+            }
+            else {
+                res(result);
+            }
+        })
+        conn.end(); 
+    })
+}
+
+/**
+ * 按 院统计 经费
+ */
+exports.fundsBySection = function(){
+    return new Promise((res, rej) => {
+        var conn = createConnection();
+        conn.connect();
+        var sql = "select section as name, sum(f.fundsReceived) as value from Project as p inner join FundManagement as f where p.projectID = f.projectID group by section;";
+        conn.query(sql,(err,result)=>{
+            if (err) {
+                rej(err)
+            }
+            else {
+                res(result);
+            }
+        })
+        conn.end(); 
+    })
+}
+
+
+/**
+ * 按照projectID修改 teacherName和Members
+ */
+exports.updateInfo = function(teacherName,projectMembers,projectID){
+    return new Promise((res, rej) => {
+        var conn = createConnection();
+        conn.connect(); 
+        var sql = "update Project set teacherName = ? ,projectMembers = ? where projectID = ?;";
+        var params = [teacherName,projectMembers,projectID]
+        conn.query(sql,params,(err,result)=>{
+            if (err) {
+                rej(err)
+            }
+            else {
+                res(result);
+            }
+        })
+        conn.end(); 
+    })
+}
+
+
+
+/**
+ * 得到  所有 年 
+ */
+exports.allYear = function(){
+    return new Promise((res, rej) => {
+        var conn = createConnection();
+        conn.connect();
+        var sql = "select distinct year(startTime) as year from Project;";
+        conn.query(sql,(err,result)=>{
+            if (err) {
+                rej(err)
+            }
+            else {
+                res(result);
+            }
+        })
+        conn.end(); 
+    })
+}
+
+
+/**
+ * 得到项目的  横纵  项目
+ */
+
+exports.typeProject = function(type){
+    return new Promise((res, rej) => {
+        var conn = createConnection();
+        conn.connect();
+        var sql = "select sum(type=?) as value from Project;";
+        var params = [type];
+        conn.query(sql,[params],(err,result)=>{
+            if (err) {
+                rej(err)
+            }
+            else {
+                res(result);
+            }
+        })
+        conn.end(); 
+    })
+}
 
 
 

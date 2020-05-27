@@ -14,59 +14,42 @@
 	<link href="../resources/plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
 	<link href="../resources/plugins/select2/css/select2.min.css" rel="stylesheet" />
 	<link href="../resources/css/common.css" rel="stylesheet" />
+
+	<style>
+		.form{
+			display: none;
+			position: absolute;
+			left: 45%;
+			top: 45%;
+			transform: translate(-50%,-50%);
+			background-color: #f9f9f9;
+			padding: 30px;
+		}
+
+		.form div{
+			margin-bottom: 20px;
+		}
+
+		.cancel{
+			margin-right: 50px;
+		}
+	</style>
 </head>
 
 <body>
 	<div id="main">
 
 		<table id="table"></table>
+
+		<form action="" class="form">
+			<div><label for="">项目编号:<input type="text" class="id" disabled></label></div>
+			<div><label for="">负责人:<input type="text" class="name"></label></div>
+			<div><label for="">项目成员:<input type="text" class="members"></label></div>
+			<input type="button" value="取消" class="cancel">
+			<input type="button" value="提交" class="submit">
+		</form>
 	</div>
-	<!-- 模态框 -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-							aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">编辑</h4>
-				</div>
-				<div class="modal-body">
-					<form>
-						<div class="form-group">
-							<label for="pname" class="col-form-label">项目名称</label>
-							<input type="text" name="pname" id="pname" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="type" class="col-form-label">类别</label>
-							<input type="text" name="type" id="type" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="subject" class="col-form-label">学科</label>
-							<input type="text" name="subject" id="subject" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="money" class="col-form-label">预算</label>
-							<input type="text" name="money" id="money" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="check" class="col-form-label">审核</label>
-							<input type="text" name="check" id="check" class="form-control">
-						</div>
-						<div class="form-group">
-							<label for="suggest" class="col-form-label">意见</label>
-							<input type="text" name="suggest" id="suggest" class="form-control">
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal"><span class=""
-							aria-hidden="true"></span>关闭</button>
-					<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class=""
-							aria-hidden="true"></span>保存</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 
 	<script src="../resources/plugins/jquery.1.12.4.min.js"></script>
 	<script src="../resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
@@ -76,6 +59,8 @@
 	<script src="../resources/plugins/jquery-confirm/jquery-confirm.min.js"></script>
 	<script src="../resources/plugins/select2/js/select2.min.js"></script>
 	<script src="../resources/js/common.js"></script>
+
+
 	<script>
 		var $table = $('#table');
 		$(function () {
@@ -90,6 +75,9 @@
 			// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
 			$table.bootstrapTable({
 				url: '/manager/project/processProject',
+				queryParams: {
+					section: sessionStorage.getItem('section')
+				},
 				type: 'get',
 				height: getHeight(),
 				striped: true,
@@ -128,10 +116,10 @@
 						title: '项目名称',
 						sortable: true,
 						align: 'center'
-                    },
-                    {
-						field: 'projectContent',
-						title: '项目概述',
+					},
+					{
+						field: 'projectID',
+						title: '项目编号',
 						sortable: true,
 						align: 'center'
 					},
@@ -140,24 +128,24 @@
 						title: '性质',
 						sortable: true,
 						align: 'center',
-						formatter(value){
-							if(value == 0) return '纵向'
-							if(value == 1) return '横向'
+						formatter(value) {
+							if (value == 0) return '纵向'
+							if (value == 1) return '横向'
 						}
-                    },
-                    {
+					},
+					{
 						field: 'teacherName',
 						title: '负责人',
 						sortable: true,
 						align: 'center'
-                    },
-                    {
+					},
+					{
 						field: 'projectMembers',
 						title: '成员',
 						sortable: true,
 						align: 'center'
-                    },
-                    {
+					},
+					{
 						field: 'section',
 						title: '单位',
 						sortable: true,
@@ -174,7 +162,7 @@
 						title: '开始时间',
 						sortable: true,
 						align: 'center',
-						formatter(value){
+						formatter(value) {
 							return value.split('T')[0]
 						}
 					},
@@ -183,7 +171,7 @@
 						title: '结束时间',
 						sortable: true,
 						align: 'center',
-						formatter(value){
+						formatter(value) {
 							return value.split('T')[0]
 						}
 					},
@@ -196,7 +184,7 @@
 					},
 					{
 						field: 'action',
-						title: '审核',
+						title: '操作',
 						align: 'center',
 						align: 'center',
 						formatter: 'actionFormatter',
@@ -219,12 +207,30 @@
 
 		window.actionEvents = {
 			'click .edit': function (e, value, row, index) {
-				alert('You click edit icon, row: ' + JSON.stringify(row));
-				console.log(value, row, index);
+				$(".id").attr("value",row.projectID);
+				$(".name").attr("value",row.teacherName);
+				$(".members").attr("value",row.projectMembers);
+
+				$('.form').css({display:'block'})
+				
+				console.log(row.projectID)
+				
+
 			},
 			'click .remove': function (e, value, row, index) {
-				alert('You click remove icon, row: ' + JSON.stringify(row));
-				console.log(value, row, index);
+				if (confirm('是否发布中检通知') ) {
+					$.ajax({
+						url: '/manager/project/midCheck',
+						type: 'post',
+						data: row,
+						success(res){
+							console.log('su')
+						},
+						error(){
+							console.log('err')
+						}
+					})
+				}
 			}
 		};
 
@@ -240,6 +246,34 @@
 			});
 			return html.join('');
 		}
+	</script>
+
+	<script>
+		$('.cancel').click(()=> {
+			$('.form').css({display:'none'})
+		})
+
+		$('.submit').click( () => {
+
+			var obj = {
+				projectID: $('.id').val(),
+				teacherName: $('.name').val(),
+				projectMembers: $('.members').val()
+			}
+
+			$.ajax({
+				url: '/manager/project/update',
+				type: 'post',
+				data: obj,
+				success(res){
+					alert('修改成功')
+					$('.form').css({display:'none'})
+				},
+				error(){
+					console.log('err')
+				}
+			})
+		})
 	</script>
 </body>
 

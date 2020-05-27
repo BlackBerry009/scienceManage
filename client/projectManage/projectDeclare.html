@@ -51,15 +51,6 @@
             </div>
         </div>
 
-        <!-- 性质分类 -->
-        <div class="form-group">
-            <label for="section" class="col-sm-2 control-label">申请部门</label>
-            <div class="col-sm-10 col-md-4">
-                <select name="section" id="section">
-                </select>
-            </div>
-        </div>
-
 
 
         <div class="form-group">
@@ -99,22 +90,7 @@
     <script src="../resources/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
 
     <script>
-        $.ajax({
-            type: 'get',
-            url: '/common/allSection',
-            success(res) {
-                var str = '';
-                res.data.forEach( item => {
-                    var temp = `<option value="${item.sectionName}">${item.sectionName}</option>`;
-                    str += temp;
-                })
-                var section = document.getElementById('section');            
-                section.innerHTML = str;
-            },
-            error() {
-                console.log('err')
-            }
-        })
+        
 
 
 
@@ -125,7 +101,7 @@
             var type = $('#type').val();
             var teacherName = $('#teacherName').val();
             var projectMembers = $('#projectMembers').val();
-            var section = $('#section').val();
+            var section = sessionStorage.getItem('section')
             var funds = $('#pMoney').val();
             var startTime = $('#start').val();
             var endTime = $('#end').val();

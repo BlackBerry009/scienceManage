@@ -141,8 +141,8 @@
 						sortable: true,
 						align: 'center',
 						formatter(value){
-							if(value == 0) return '纵向'
-							if(value == 1) return '横向'
+							if(value == 0) return '中检报告'
+							if(value == 1) return '结题报告'
 						}
                     },
 					{
@@ -151,7 +151,16 @@
 						sortable: true,
 						align: 'center',
 						formatter: 'download'
-                    }
+					},
+					{
+						field: 'action',
+						title: '操作',
+						halign: 'center',
+						align: 'center',
+						formatter: 'actionFormatter',
+						events: 'actionEvents',
+						clickToSelect: false
+					}
 					
 				]
 			}).on('all.bs.table', function (e, name, args) {
@@ -161,9 +170,61 @@
 		});
 
 
+
+
 		function download(value, row) {
 			return `<a href="/user/download?path=./${row.filePath}" style="color:blue" download="${row.fileName}">下载</a>`
 		}
+
+		function actionFormatter(value, row, index) {
+			return [
+				'<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" style="color:green">通过</a>　',
+				'<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" style="color:red">拒绝</a>'
+			].join('');
+		}
+
+		window.actionEvents = {
+			'click .edit': function (e, value, row, index) {
+				let msg = '确定通过审核吗'
+				if (confirm(msg)) {
+					$.ajax({
+						url: '/manager/checkReport',
+						type: 'post',
+						data: {
+							id: row.id,
+							state: 1,
+							projectID: row.projectID
+						},
+						success(res){
+							alert('提交成功')
+						},
+						error(){
+							console.log('error')
+						}
+					})
+				}
+			},
+			'click .remove': function (e, value, row, index) {
+				let msg = '确定拒绝通过吗'
+				if (confirm(msg)) {
+					$.ajax({
+						url: '/manager/checkReport',
+						type: 'post',
+						data: {
+							id: row.id,
+							state: 2,
+							projectID: row.projectID
+						},
+						success(res){
+							alert('提交成功')
+						},
+						error(){
+							console.log('error')
+						}
+					})
+				}
+			}
+		};
 
 
 		function detailFormatter(index, row) {

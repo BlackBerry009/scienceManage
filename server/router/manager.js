@@ -1,15 +1,22 @@
 var express = require('express');
 var fs = require('fs')
+const crypto = require('crypto');
 
 const processService = require('../service/processService')
+const teacherService = require('../service/teacherService')
 const projectService = require('../service/projectService')
 const changeRequestService = require('../service/changeRequestService')
 const processDocumentsService = require('../service/processDocumentsService')
 const scientificSearchService = require('../service/scientificSearchService')
 const noticeDaoService = require('../service/noticeService')
 const managerService = require('../service/managerService')
+const sectionService = require('../service/sectionService')
 
 
+function hmac(data){
+    let hmac = crypto.createHmac('md5','后台传入/任意值');
+    return hmac.update(data).digest('base64');
+  }
 
 var router = express.Router();
 
@@ -95,16 +102,57 @@ router.get('/download',async (req,res) => {
  * 项目立项的项目
  */
 router.get('/project/establishProject',async (req,res) => {
-    var data = await projectService.establishProject()
+    var data = await projectService.establishProject(req.query.section)
     res.send(data)
 })
+
+
+/**
+ * 确定  立项
+ */
+router.post('/project/yesEstablish',async (req,res) => {
+    var data = await projectService.yesEstablish(req.body.id)
+
+    res.send(data)
+})
+
 
 
 /**
  * 进展管理的项目
  */
 router.get('/project/processProject',async (req,res) => {
-    var data = await projectService.processProject()
+    var data = await projectService.processProject(req.query.section)
+    res.send(data)
+})
+
+/**
+ * 中检 通知
+ */
+router.post('/project/midCheck',async (req,res) => {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var time = year + '-' + month + '-' + day; 
+    var obj = {
+        title: '中检通知',
+        content: `请提交项目编号${req.body.projectID}的中检报告`,
+        recipient: req.body.teacherName,
+        time: time,
+        teacherID: req.body.teacherID,
+    }
+    console.log(obj)
+    var data = await noticeDaoService.publish(obj)
+    res.send(data)
+})
+
+/**
+ * 中检修改
+ */
+router.post('/project/update',async (req,res) => {
+    console.log(req.body)
+    var data = await projectService.updateInfo(req.body)
     res.send(data)
 })
 
@@ -166,6 +214,78 @@ router.get('/lookReport',async (req,res) => {
     var result = await processDocumentsService.lookReport();
     res.send(result)
 })
+
+/**
+ * 查看提交报告管理
+ */
+router.post('/checkReport',async (req,res) => {
+    var result = await processDocumentsService.checkReport(req.body.id,req.body.state,req.body.projectID)
+    res.send(result)
+})
+
+
+/**
+ * 院级 项目统计
+ */
+router.get('/projectBySection',async (req,res) => {
+    console.log(req.query)
+    var result = await projectService.projectBySection(req.query.year)
+    res.send(result)
+})
+
+/**
+ * 院级 经费统计
+ */
+router.get('/fundsBySection',async (req,res) => {
+    var result = await projectService.fundsBySection();
+    res.send(result)
+})
+ 
+
+/**
+ * 注册 
+ */
+router.post('/registerT',async (req,res) => {
+    console.log(req.body.password)
+    let mima = hmac(req.body.password);
+    var obj = {
+        teacherID: req.body.teacherID,
+        teacherName: req.body.teacherName,
+        password: mima,
+        section: req.body.section,
+        phone: req.body.phone
+    }
+    await teacherService.register(obj)
+    res.send({ok:true}) 
+})
+
+router.post('/registerM',async (req,res) => {
+    let mima = hmac(req.body.password);
+    var obj = {
+        mid: req.body.mid,
+        name: req.body.name,
+        password: mima,
+        position: req.body.position,
+        section: req.body.section
+    }
+    console.log(req.body)
+    await managerService.register(obj)
+})
+
+
+/**
+ * 审核  变更申请
+ */
+router.post('/change/check',async (req,res) => {
+    console.log(req.body)
+    await changeRequestService.check(req.body.pid,req.body.state)
+    res.send( {ok:true} )
+})
+
+
+
+
+
 
 
 module.exports = router

@@ -7,7 +7,7 @@ exports.lookNotice = function (teacherID) {
     return new Promise((res, rej) => {
         var conn = createConnection();
         conn.connect();
-        var sql = 'select * from Notice where teacherID = ?';
+        var sql = 'select * from Notice where teacherID = ? order by time desc;';
         var params = [teacherID];
         conn.query(sql, params,(err,result)=>{
             if (err) {
