@@ -198,6 +198,14 @@ exports.updateInfo = async function ({ teacherName, projectMembers, projectID })
 }
 
 /**
+ * 
+ */
+exports.updateState = async function (state,id) {
+    let res = await projectDao.updateState(state,id)
+    return { data: res }
+}
+
+/**
  *  得到所有 年
  */
 exports.allYear = async function () {

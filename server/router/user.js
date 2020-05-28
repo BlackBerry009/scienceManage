@@ -99,6 +99,7 @@ router.post('/scientificSearch/add',upload.single('file'),async (req,res)=>{
     console.log(req.body)
     var obj = {};
     Object.assign(obj,req.body,{fileName:req.file.originalname,filePath:req.file.path})
+    // console.log(obj) 
     await scientificSearchService.applyResults(obj)
     res.send({ok:true})
 })

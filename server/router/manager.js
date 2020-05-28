@@ -72,6 +72,7 @@ router.get('/project/check',async (req,res) => {
 router.post('/yesProject',async (req,res) => {
     console.log(req.body)
     await processService.yesProcess(req.body.pid,req.body.type)
+    // await projectService.updateState(2,req.body.pid)
     res.send({ok:true})
 })
 
@@ -247,11 +248,11 @@ router.get('/fundsBySection',async (req,res) => {
  */
 router.post('/registerT',async (req,res) => {
     console.log(req.body.password)
-    let mima = hmac(req.body.password);
+    // let mima = hmac(req.body.password);
     var obj = {
         teacherID: req.body.teacherID,
         teacherName: req.body.teacherName,
-        password: mima,
+        password: req.body.password,
         section: req.body.section,
         phone: req.body.phone
     }
@@ -260,11 +261,11 @@ router.post('/registerT',async (req,res) => {
 })
 
 router.post('/registerM',async (req,res) => {
-    let mima = hmac(req.body.password);
+    // let mima = hmac(req.body.password);
     var obj = {
         mid: req.body.mid,
         name: req.body.name,
-        password: mima,
+        password: req.body.password,
         position: req.body.position,
         section: req.body.section
     }
