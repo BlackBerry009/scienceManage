@@ -238,7 +238,8 @@ router.get('/projectBySection',async (req,res) => {
  * 院级 经费统计
  */
 router.get('/fundsBySection',async (req,res) => {
-    var result = await projectService.fundsBySection();
+    console.log(req.query)
+    var result = await projectService.fundsBySection(req.query.year);
     res.send(result)
 })
  
@@ -259,7 +260,7 @@ router.post('/registerT',async (req,res) => {
     await teacherService.register(obj)
     res.send({ok:true}) 
 })
-
+ 
 router.post('/registerM',async (req,res) => {
     // let mima = hmac(req.body.password);
     var obj = {

@@ -13,6 +13,7 @@ var router = express.Router();
  */
 router.post('/login', async (req, res) => {
     var data = req.body;
+    console.log(req.body)
     if (data.type == 'teacher') {
         const info = await teacherService.login(data.teacherID, data.password)
         if (info.forbid) {

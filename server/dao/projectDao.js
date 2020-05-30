@@ -309,12 +309,13 @@ exports.projectBySection = function(year){
 /**
  * 按 院统计 经费
  */
-exports.fundsBySection = function(){
+exports.fundsBySection = function(year){
     return new Promise((res, rej) => {
         var conn = createConnection();
         conn.connect();
-        var sql = "select section as name, sum(f.fundsReceived) as value from Project as p inner join FundManagement as f where p.projectID = f.projectID group by section;";
-        conn.query(sql,(err,result)=>{
+        var sql = "select section as name, sum(f.fundsReceived) as value from Project as p inner join FundManagement as f where p.projectID = f.projectID and year(startTime) = ? group by section;";
+        var params = [year]
+        conn.query(sql,params,(err,result)=>{
             if (err) {
                 rej(err)
             }

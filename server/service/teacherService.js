@@ -10,7 +10,7 @@ function hmac(data){
 exports.login = async function(teacherID,password){
     var info = await teacherDao.lookPassword(teacherID)
     let mima = hmac(password);
-    if(info[0].password == password){
+    if(info.length != 0 && info[0].password == password){
         return info
     } else{
         return { forbid: true }

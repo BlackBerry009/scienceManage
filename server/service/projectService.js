@@ -148,8 +148,8 @@ exports.projectBySection = async function (year) {
 /**
  * 
  */
-exports.fundsBySection = async function () {
-    let res = await projectDao.fundsBySection();
+exports.fundsBySection = async function (year) {
+    let res = await projectDao.fundsBySection(year);
     let arr = [];
     for (const item of res) {
         arr.push(item.name)

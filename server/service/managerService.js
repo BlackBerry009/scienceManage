@@ -16,8 +16,9 @@ exports.register = async function({mid,name,password,position,section}){
  */
 exports.login = async function(mid,password){
     var res = await managerDao.login(mid);
+    console.log(res)
     let mima = hmac(password);
-    if(res[0].password == password){
+    if(res.length != 0 && res[0].password == password){
         return res;
     } else {
         return {forbid: true}
