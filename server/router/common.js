@@ -16,6 +16,7 @@ router.post('/login', async (req, res) => {
     console.log(req.body)
     if (data.type == 'teacher') {
         const info = await teacherService.login(data.teacherID, data.password)
+        console.log('info',info)
         if (info.forbid) {
             res.send(info)
         } else {

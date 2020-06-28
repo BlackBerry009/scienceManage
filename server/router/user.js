@@ -44,7 +44,7 @@ router.get('/project/myProject',async (req,res) => {
 router.post('/project/add',upload.single('file'),async (req,res)=>{
     var obj = {};
     Object.assign(obj,req.body,{fileName:req.file.originalname,filePath:req.file.path})
-    await projectService.addProject(obj);
+    await projectService.addProject(obj); 
     res.send({ok:true})
 })
 

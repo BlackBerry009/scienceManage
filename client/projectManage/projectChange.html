@@ -58,6 +58,12 @@
             var teacherName = $('#teacherName').val();
             var changeContent = $('#changeContent').val();
             var teacherID = sessionStorage.getItem('teacherID');
+
+            var flag = !projectID || !projectName || !teacherName || !changeContent || teacherID;
+            if(flag){
+                alert('请填写完整')
+                return;
+            }
             var obj = {
                 projectName,
                 projectID,

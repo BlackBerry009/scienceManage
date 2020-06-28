@@ -82,6 +82,7 @@ router.post('/yesProject',async (req,res) => {
 router.post('/noProject',async (req,res) => {
     console.log(req.body)
     await processService.noProcess(req.body.pid,req.body.type)
+    await projectService.updateState(1,req.body.pid)
     res.send({ok:true})
 })
 
